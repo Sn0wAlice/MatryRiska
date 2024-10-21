@@ -41,6 +41,9 @@ pub async fn handler(path: web::Path<String>, mut payload: web::Payload, req: Ht
         "risk/create" => {
             return risk::create(parsed_json).await;
         }
+        "scenario/create" => {
+            return scenario::create(parsed_json).await;
+        }
         _ => {
             trace_logs("Path not found".to_string());
             return HttpResponse::Ok().content_type("application/json").body("{\"error\": \"path not found\"}").customize();

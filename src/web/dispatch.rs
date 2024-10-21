@@ -20,6 +20,10 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
     "main" => { content_body = main::main().await; },
     "risk/create" => { content_body = risk::create().await; },
 
+
+    path if path.starts_with("risk/detail/") => { content_body = risk::detail(path_arg).await; },
+    path if path.starts_with("scenario/create/") => { content_body = scenario::create(path_arg).await; },
+
     _ => {      
       content_body = "__404".to_string();
     }

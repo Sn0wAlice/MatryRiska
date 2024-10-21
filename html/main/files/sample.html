@@ -1,15 +1,17 @@
 <tr>
     <td>
-        <p class="d-inline-block align-middle mb-0">
-            <span class="font-13 fw-medium">{{risk_name}}</span>
-        </p>
+        <a href="/risk/detail/{{risk_uuid}}">
+            <p class="d-inline-block align-middle mb-0">
+                <span class="font-13 fw-medium">{{risk_name}}</span>
+            </p>
+        </a>
     </td>
     <td><a href="" class="d-inline-block align-middle mb-0 text-body">{{risk_uuid}}</a>
     </td>
     <td><span class="badge bg-danger-subtle text-danger">HIGH Risk</span></td>
-    <td>4</td>
+    <td>{{sc_count}}</td>
     <td>12</td>
     <td class="text-end">
-        <a href="#"><i class="las la-pen text-secondary fs-18"></i></a>
+        <a href="/risk/detail/{{risk_uuid}}"><i class="las la-pen text-secondary fs-18"></i></a>
     </td>
 </tr>

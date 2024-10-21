@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Risk Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+
+                    <div class="col-md-12 col-lg-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col ">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 text-truncate">
+                                                <h5 class="m-0 fs-3 fw-bold">{{risk_title}}</h5>
+                                            </div>
+                                            <!--end media body-->
+                                        </div>
+                                        <!--end media-->
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <div class="mt-3">
+                                    <div class="text-body mb-2  d-flex align-items-center">
+                                        {{risk_description}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end card-body-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                    <!--end col-->
+                    <div class="col-md-12 col-lg-7">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="card shadow-none border mb-3 mb-lg-0">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-grow-1 text-truncate">
+                                                        <p class="text-dark mb-0 fw-semibold fs-13">Scenario Count</p>
+                                                        <h3 class="mt-1 mb-0 fs-18 fw-bold">{{scenario_count}}
+                                                        </h3>
+                                                    </div>
+                                                    <!--end media body-->
+                                                </div>
+                                            </div>
+                                            <!--end card-body-->
+                                        </div>
+                                        <!--end card-body-->
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="card shadow-none border mb-3 mb-lg-0">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-grow-1 text-truncate">
+                                                        <p class="text-dark mb-0 fw-semibold fs-13">Countermeasure Count
+                                                        </p>
+                                                        <h3 class="mt-1 mb-0 fs-18 fw-bold">12
+                                                        </h3>
+                                                    </div>
+                                                    <!--end media body-->
+                                                </div>
+                                            </div>
+                                            <!--end card-body-->
+                                        </div>
+                                        <!--end card-body-->
+                                    </div>
+
+                                </div>
+                                <!--end row-->
+                                <div class="bg-primary-subtle p-2 border-dashed border-primary rounded mt-3">
+                                    <img src="/assets/imgs/gif/party.gif" alt="" class="d-inline-block me-1"
+                                        height="30">
+                                    <span class="text-primary fw-normal">
+                                        You have <b>{{scenario_count}}</b> Scenarios and <b>12</b> Countermeasures in this risk
+                                    </span>
+                                </div>
+                            </div>
+                            <!--end card-body-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h4 class="card-title">Scenarios</h4>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary" onclick="document.location.href='/scenario/create/{{risk_uuid}}'"><i class="fa-solid fa-plus me-1"></i>
+                                            New Scenario
+                                        </button>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                            <!--end card-header-->
+                            <div class="card-body pt-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Scenario Description</th>
+                                                <th>Threat Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {{sc_list}}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+</body>
+<!--end body-->
+
+</html>
