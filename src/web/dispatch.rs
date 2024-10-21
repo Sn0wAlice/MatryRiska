@@ -17,7 +17,8 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
   
   match path_arg.as_str() {
     "" => { content_body = home::home().await; },
-  
+    "main" => { content_body = main::main().await; },
+    "risk/create" => { content_body = risk::create().await; },
 
     _ => {      
       content_body = "__404".to_string();

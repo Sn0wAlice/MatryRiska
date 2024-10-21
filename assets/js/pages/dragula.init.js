@@ -1,0 +1,1 @@
+var iconTochange;dragula([document.getElementById("project-list-start"),document.getElementById("project-list-center"),document.getElementById("project-list-end")]);
