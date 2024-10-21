@@ -1,0 +1,138 @@
+[
+    {
+        "ext": ["txt"],
+        "type": "text/plain"
+    },
+    {
+        "ext": ["html", "htm", ""],
+        "type": "text/html"
+    },
+    {
+        "ext": ["css"],
+        "type": "text/css"
+    },
+    {
+        "ext": ["js"],
+        "type": "application/javascript"
+    },
+    {
+        "ext": ["json"],
+        "type": "application/json"
+    },
+    {
+        "ext": ["xml"],
+        "type": "application/xml"
+    },
+    {
+        "ext": ["png"],
+        "type": "image/png"
+    },
+    {
+        "ext": ["jpg", "jpeg"],
+        "type": "image/jpeg"
+    },
+    {
+        "ext": ["gif"],
+        "type": "image/gif"
+    },
+    {
+        "ext": ["svg"],
+        "type": "image/svg+xml"
+    },
+    {
+        "ext": ["ico"],
+        "type": "image/x-icon"
+    },
+    {
+        "ext": ["mp3"],
+        "type": "audio/mpeg"
+    },
+    {
+        "ext": ["mp4"],
+        "type": "video/mp4"
+    },
+    {
+        "ext": ["pdf"],
+        "type": "application/pdf"
+    },
+    {
+        "ext": ["zip"],
+        "type": "application/zip"
+    },
+    {
+        "ext": ["rar"],
+        "type": "application/x-rar-compressed"
+    },
+    {
+        "ext": ["7z"],
+        "type": "application/x-7z-compressed"
+    },
+    {
+        "ext": ["doc", "docx"],
+        "type": "application/msword"
+    },
+    {
+        "ext": ["xls", "xlsx"],
+        "type": "application/vnd.ms-excel"
+    },
+    {
+        "ext": ["ppt", "pptx"],
+        "type": "application/vnd.ms-powerpoint"
+    },
+    {
+        "ext": ["odt"],
+        "type": "application/vnd.oasis.opendocument.text"
+    },
+    {
+        "ext": ["odp"],
+        "type": "application/vnd.oasis.opendocument.presentation"
+    },
+    {
+        "ext": ["ods"],
+        "type": "application/vnd.oasis.opendocument.spreadsheet"
+    },
+    {
+        "ext": ["odg"],
+        "type": "application/vnd.oasis.opendocument.graphics"
+    },
+    {
+        "ext": ["odc"],
+        "type": "application/vnd.oasis.opendocument.chart"
+    },
+    {
+        "ext": ["odf"],
+        "type": "application/vnd.oasis.opendocument.formula"
+    },
+    {
+        "ext": ["odb"],
+        "type": "application/vnd.oasis.opendocument.database"
+    },
+    {
+        "ext": ["odi"],
+        "type": "application/vnd.oasis.opendocument.image"
+    },
+    {
+        "ext": ["oxt"],
+        "type": "application/vnd.openofficeorg.extension"
+    },
+    {
+        "ext": ["docm"],
+        "type": "application/vnd.ms-word.document.macroEnabled.12"
+    },
+    {
+        "ext": ["dotm"],
+        "type": "application/vnd.ms-word.template.macroEnabled.12"
+    },
+    {
+        "ext": ["xlsm"],
+        "type": "application/vnd.ms-excel.sheet.macroEnabled.12"
+    },
+    {
+        "ext": ["woff", "woff2"],
+        "type": "application/font-woff"
+    },
+    {
+        "ext": ["webp"],
+        "type": "image/webp"
+    }
+]

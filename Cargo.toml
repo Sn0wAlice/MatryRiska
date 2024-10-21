@@ -1,0 +1,24 @@
+[package]
+name = "matryriska"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "0.13.3"
+actix-cors = "0.7.0"
+actix-web = "4.5.1"
+dotenvy = "0.15.7"
+reqwest = { version = "0.12.4", features = ["blocking", "json"] }
+serde = {version = "1.0.197", features = ["derive"]}
+serde_json = "1.0.114"
+sha2 = "0.10.8"
+tracing = "0.1.40"
+tracing-actix-web = "0.7.9"
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+uuid = "1.7.0"
+regex = "1.10.3"
+comrak = "0.24.1"
+rand = "0.8"
+chrono = "0.4"
