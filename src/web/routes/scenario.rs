@@ -85,7 +85,7 @@ pub async fn detail(path:String) -> String {
     return index;
 }
 
-fn calculate_risk(e5: i32, f5: i32, g5: i32, h5: i32, i5: i32) -> &'static str {
+pub fn calculate_risk(e5: i32, f5: i32, g5: i32, h5: i32, i5: i32) -> &'static str {
     // Calculate the maximum of the inputs F5, G5, H5, I5
     let max_val = f5.max(g5).max(h5).max(i5);
 
