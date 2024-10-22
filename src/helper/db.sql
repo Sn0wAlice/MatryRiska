@@ -20,3 +20,12 @@ create table scenario_risk (
     legal_compliance int not null,
     financial int not null
 );
+
+create table countermeasure(
+    ctm_uuid varchar(36) primary key,
+    scenario_uuid varchar(36) not null,
+    title varchar(255) not null default 'New Countermeasure',
+    description text not null,
+    solved int not null default 0,
+    solved_description text
+);
