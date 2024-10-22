@@ -4,7 +4,7 @@ use std::fs;
 use uuid::Uuid;
 
 use crate::helper::functions::is_uuid_v4;
-use crate::helper::database::{get_risk_detail, get_all_scenario_of_risk};
+use crate::helper::database::{get_risk_detail, get_all_scenario_of_risk, get_all_countermeasure_from_risk_uuid};
 
 use super::scenario;
 
@@ -39,6 +39,7 @@ pub async fn detail(path: String) -> String {
   let base_scenario = fs::read_to_string("html/risk/files/scenario.html").unwrap();
 
   for scenario in scenario_list {
+
     let scenario = base_scenario
       .replace("{{scenario_id}}", get_id(scenario.scenario_uuid).as_str())
       .replace("{{scenario_uuid}}", scenario.scenario_uuid.to_string().as_str())
@@ -48,12 +49,15 @@ pub async fn detail(path: String) -> String {
     str.push_str(scenario.as_str());
   }
 
+  let countermeasure = get_all_countermeasure_from_risk_uuid(risk_uuid.clone()).await;
+
 
   let index = fs::read_to_string("html/risk/detail.html").unwrap()
     .replace("{{risk_title}}", risk_detail.risk_name.as_str())
     .replace("{{risk_uuid}}", risk_detail.risk_uuid.to_string().as_str())
     .replace("{{risk_description}}", risk_detail.risk_description.as_str())
     .replace("{{scenario_count}}", scenario_count.to_string().as_str())
+    .replace("{{ctm_count}}", countermeasure.len().to_string().as_str())
     .replace("{{sc_list}}", str.as_str());
 
   return index;

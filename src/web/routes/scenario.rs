@@ -1,8 +1,9 @@
 // export the home route handler
 use std::fs;
 
+use crate::web::routes::risk::get_id;
 use crate::helper::functions::is_uuid_v4;
-use crate::helper::database::{get_risk_detail, get_scenario_detail,get_scenario_risk};
+use crate::helper::database::{get_risk_detail, get_scenario_detail,get_scenario_risk, get_all_countermeasure_of_sc};
 
 #[tracing::instrument(level = "info")]
 pub async fn create(path:String) -> String {
@@ -48,12 +49,25 @@ pub async fn detail(path:String) -> String {
     }
 
     let scenario_detail = scenario_detail.get(0).unwrap();
-    println!("{:?}", scenario_detail);
 
     let scenario_risk = get_scenario_risk(scenario_detail.scenario_uuid.to_string()).await;
     let scenario_risk = scenario_risk.get(0).unwrap();
 
-    println!("{:?}", scenario_risk);
+
+    let countermeasure = get_all_countermeasure_of_sc(scenario_detail.scenario_uuid.to_string()).await;
+
+    let mut countermeasure_html = String::new();
+    let base_countermeasure = fs::read_to_string("html/scenario/files/countermeasure.html").unwrap();
+
+    for cm in countermeasure {
+        let cm_html = base_countermeasure.replace("{{cm_uuid}}", cm.ctm_uuid.to_string().as_str())
+            .replace("{{cm_title}}", cm.title.as_str())
+            .replace("{{cm_id}}", get_id(cm.ctm_uuid).to_string().as_str())
+            .replace("{{cm_solved}}", cm.solved.to_string().as_str())
+            .replace("{{cm_description}}", cm.description.as_str());
+
+        countermeasure_html.push_str(cm_html.as_str());
+    }
 
 
     let index = fs::read_to_string("html/scenario/detail.html").unwrap()
@@ -65,7 +79,8 @@ pub async fn detail(path:String) -> String {
         .replace("{{sc_legal_compliance}}", scenario_risk.legal_compliance.to_string().as_str())
         .replace("{{sc_financial}}", scenario_risk.financial.to_string().as_str())
         .replace("{{sc_final_risk}}", calculate_risk(scenario_risk.likehood, scenario_risk.operational, scenario_risk.legal_compliance, scenario_risk.financial, scenario_risk.reputation))
-        .replace("{{sc_reputation}}", scenario_risk.reputation.to_string().as_str());
+        .replace("{{sc_reputation}}", scenario_risk.reputation.to_string().as_str())
+        .replace("{{ctm_list}}", countermeasure_html.as_str());
 
     return index;
 }
