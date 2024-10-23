@@ -92,6 +92,19 @@
                                     <b>Note: </b>{{scenario_note}}
                                 </p>
 
+                                <div style="display: flex; width: 100%; margin-top: 18px;">
+                                    <div class="col-auto" style="width: 50%;">
+                                        <button class="btn btn-update" onclick="document.location.href='/scenario/update/{{scenario_uuid}}'"><i class="fa-solid fa-pencil me-1"></i>
+                                            Update Scenario
+                                        </button>
+                                    </div>
+    
+                                    <div class="col-auto" style="align-items: end;">
+                                        <button class="btn btn-danger" onclick="document.location.href='/scenario/delete/{{scenario_uuid}}'"><i class="fa-solid fa-trash me-1"></i>
+                                            Delete Scenario
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <!--end card-body-->
                         </div>

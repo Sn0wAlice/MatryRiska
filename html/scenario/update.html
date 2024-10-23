@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Update Scenario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <link href="/assets/libs/vanillajs-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+    
+    {{inject_top}}
+
+    {{inject_side}}
+
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="row g-0 h-100">
+                                    <div class="col-lg-7 border-end">
+                                        <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Update Scenario</h4>
+
+                                        <div class="p-4 pt-3">
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="pro-message">Scenario description</label>
+                                                <textarea class="form-control" rows="5" id="sc_scenario_description"
+                                                    placeholder="Enter scenario description">{{scenario_description}}</textarea>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="pro-message">Threat description</label>
+                                                <textarea class="form-control" rows="5" id="sc_threat_description"
+                                                    placeholder="Enter threat description">{{scenario_threat}}</textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                                                        <label class="form-label mt-2" for="pro-price-type">
+                                                            LikeHood
+                                                        </label>
+                                                        <select class="form-select" name="likehood">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--end row-->
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <!--end col-->
+                                                    <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                                                        <label class="form-label mt-2" for="pro-price-type">
+                                                            Reputational
+                                                        </label>
+                                                        <select class="form-select" name="reputational">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                                                        <label class="form-label mt-2" for="pro-price-type">
+                                                            Operational
+                                                        </label>
+                                                        <select class="form-select" name="operational">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                                                        <label class="form-label mt-2" for="pro-price-type">
+                                                            Legal / Compliance
+                                                        </label>
+                                                        <select class="form-select" name="legal_compliance">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3 col-6 mb-2 mb-lg-1">
+                                                        <label class="form-label mt-2" for="pro-price-type">
+                                                            Financial
+                                                        </label>
+                                                        <select class="form-select" name="financial">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--end row-->
+                                            </div>
+
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="pro-message">Custom Note</label>
+                                                <textarea class="form-control" rows="5" id="sc_custom_note"
+                                                    placeholder="writing here..">{{scenario_note}}</textarea>
+                                            </div>
+                                            <!--end form-group-->
+
+                                            <button type="submit" class="btn btn-primary" onclick="update()">Update Scenario</button>
+                                            <button type="button" class="btn btn-danger" onclick="document.location.href='/scenario/detail/{{scenario_uuid}}'">Cancel</button>
+                                        </div>
+                                        <!--end form-->
+                                    </div>
+
+                                    <!--end col-->
+                                    <div class="col-lg-5 align-self-center">
+                                        <form class="p-4">
+                                            <div class="form-group">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/assets/imgs/logo.png" alt=""
+                                                        class="thumb-xxl rounded me-3">
+                                                    <!--end media body-->
+                                                </div>
+
+                                            </div>
+                                            <!--end form-group-->
+                                            <h3 class="fw-semibold fs-20">Update Scenario</h3>
+                                            <h5 class="fw-normal my-3 lh-lg">
+                                                Update scenario to make it more accurate and relevant.<br>
+                                                Don't forget to add some sources to make it more reliable.
+                                            </h5>
+                                            {{inject_contributors}}
+                                        </form>
+
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/vanillajs-datepicker/js/datepicker-full.min.js"></script>
+    <script src="/assets/js/pages/projects-create.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+
+        async function update() {
+            let sc_scenario_description = document.getElementById('sc_scenario_description').value;
+            let sc_threat_description = document.getElementById('sc_threat_description').value;
+            let sc_likehood = document.getElementsByName('likehood')[0].value;
+            let sc_reputational = document.getElementsByName('reputational')[0].value;
+            let sc_operational = document.getElementsByName('operational')[0].value;
+            let sc_legal_compliance = document.getElementsByName('legal_compliance')[0].value;
+            let sc_financial = document.getElementsByName('financial')[0].value;
+            let sc_custom_note = document.getElementById('sc_custom_note').value;
+
+            let data = {
+                uuid: '{{scenario_uuid}}',
+                sc_scenario_description: sc_scenario_description,
+                sc_threat_description: sc_threat_description,
+                sc_likehood: sc_likehood,
+                sc_reputational: sc_reputational,
+                sc_operational: sc_operational,
+                sc_legal_compliance: sc_legal_compliance,
+                sc_financial: sc_financial,
+                sc_custom_note: sc_custom_note
+            }
+
+            let response = await fetch('/api/scenario/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            let result = await response.json();
+
+            if (result.status == 'success') {
+                document.location.href = '/scenario/detail/{{scenario_uuid}}';
+            } else {
+                alert('Failed to update scenario');
+            }
+        }
+
+    </script>
+</body>
+<!--end body-->
+
+</html>

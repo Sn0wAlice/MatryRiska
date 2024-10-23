@@ -439,6 +439,45 @@ pub async fn create_new_scenario(risk_uuid: String, scenario_description: String
     return Uuid::nil();
 }
 
+pub async fn update_scenario(scenario_uuid: String, scenario_description: String, threat_description: String, add_note: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("UPDATE scenario SET scenario_description = '{}', threat_description = '{}', add_note = '{}' WHERE scenario_uuid = '{}'", scenario_description, threat_description, add_note, scenario_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to update scenario".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
 pub async fn get_scenario_risk(scenario_uuid:String) -> Vec<ScenarioRisk> {
     // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
     let lock_result = unsafe { DB_CLIENT.lock() };
@@ -527,6 +566,45 @@ pub async fn create_scenario_risk(scenario_uuid: String, likehood: i32, reputati
             },
             Err(_) => {
                 return Err("Failed to insert new scenario risk".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
+pub async fn update_scenario_risk(scenario_uuid: String, likehood: i32, reputation: i32, operational: i32, legal_compliance: i32, financial: i32) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("UPDATE scenario_risk SET likehood = '{}', reputation = '{}', operational = '{}', legal_compliance = '{}', financial = '{}' WHERE scenario_uuid = '{}'", likehood, reputation, operational, legal_compliance, financial, scenario_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to update scenario risk".to_owned());
             }
         }
     }
