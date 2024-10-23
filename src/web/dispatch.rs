@@ -30,6 +30,7 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
 
     path if path.starts_with("countermeasure/create/") => { content_body = countermeasure::create(path_arg).await; },
     path if path.starts_with("countermeasure/detail/") => { content_body = countermeasure::detail(path_arg).await; },
+    path if path.starts_with("countermeasure/update/") => { content_body = countermeasure::update(path_arg).await; },
 
     _ => {      
       content_body = "__404".to_string();

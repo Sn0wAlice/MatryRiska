@@ -821,6 +821,43 @@ pub async fn get_ctm_by_id(ctm_uuid:String) -> Vec<Countermeasure> {
     return countermeasures;
 }
 
+pub async fn update_countermeasure(ctm_uuid: String, title: String, description: String, solved: i32, solved_description: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
 
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("UPDATE countermeasure SET title = '{}', description = '{}', solved = '{}', solved_description = '{}' WHERE ctm_uuid = '{}'", title, description, solved, solved_description, ctm_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to update countermeasure".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
 
 

@@ -53,6 +53,9 @@ pub async fn handler(path: web::Path<String>, mut payload: web::Payload, req: Ht
         "countermeasure/create" => {
             return countermeasure::create(parsed_json).await;
         }
+        "countermeasure/update" => {
+            return countermeasure::update(parsed_json).await;
+        }
         _ => {
             trace_logs("Path not found".to_string());
             return HttpResponse::Ok().content_type("application/json").body("{\"error\": \"path not found\"}").customize();
