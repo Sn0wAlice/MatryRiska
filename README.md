@@ -33,11 +33,7 @@ wget https://raw.githubusercontent.com/Sn0wAlice/MatryRiska/refs/heads/main/dock
 docker-compose up
 ```
 
-(arm64)
-```bash
-wget https://raw.githubusercontent.com/Sn0wAlice/MatryRiska/refs/heads/main/docker-compose-arm.yml
-docker-compose up
-```
+(arm64) please use cargo
 
 ### 2. Using cargo
 ```bash
