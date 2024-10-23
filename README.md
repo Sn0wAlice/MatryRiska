@@ -1,4 +1,4 @@
-# MatryRiska
+# MatryRiska 🪆
 
 MatryRiska – Where you can manage your risk and make it more manageable.
 
@@ -11,19 +11,43 @@ MatryRiska – Where you can manage your risk and make it more manageable.
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [Contributing](#contributing)
+- [Contributors](#contributors)
 
 ## About
-TODO
+MatryRiska is a fast, secure, and efficient risk management platform that empowers users to manage their risks more effectively. Built with Rust, a systems programming language known for its performance and security, MatryRiska leverages modern web technologies to deliver an intuitive and powerful interface.
 
 ## Features
-TODO
+Key Features:
+
+- Speed and Security: Developed in Rust, ensuring a highly performant and secure platform.
+- Web-Based: Accessible from any modern browser, enabling seamless interaction with risk data.
+- Docker Support: Fully containerized with Docker, making deployment and scaling straightforward and efficient.
 
 ## Getting Started
-TODO
+
+You can run the applicaiton using either docker or cargo. But we strongly recommend using **docker** for the ease of use.
+
+### 1. Using docker
+```bash
+wget https://raw.githubusercontent.com/Sn0wAlice/MatryRiska/refs/heads/main/docker-compose.yml
+docker-compose up
+```
+
+### 2. Using cargo
+```bash
+## Step 1: configure mysql db (can use docker-compose-dev.yml)
+# [...]
+
+## Step 2: run the server
+git clone https://github.com/Sn0wAlice/MatryRiska
+cd MatryRiska
+cargo run
+```
 
 ## Usage
-TODO
+When the app is up: go on `http://localhost:8080` and that's it!
 
-## Contributing
-- [Contributing Guide](CONTRIBUTING.md)
+You wan't to add a new functionality? Feel free to open a [issue](https://github.com/Sn0wAlice/MatryRiska/issues) or a pull request!
+
+## Contributors
+- [Sn0wAlice](https://github.com/Sn0wAlice)
