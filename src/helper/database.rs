@@ -648,7 +648,61 @@ pub async fn get_all_countermeasure_from_risk_uuid(risk_uuid:String) -> Vec<Coun
     return countermeasures;
 }
 
+pub async fn get_ctm_by_id(ctm_uuid:String) -> Vec<Countermeasure> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
 
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    let mut countermeasures: Vec<Countermeasure> = Vec::new();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM countermeasure WHERE ctm_uuid = '{}' ORDER BY title ASC", ctm_uuid);
+
+        let result = conn.query_map(query, |(ctm_uuid, scenario_uuid, title, description, solved, solved_description): (String, String, String, String, i32, String)| {
+            Countermeasure {
+                ctm_uuid: Uuid::parse_str(&ctm_uuid).unwrap(),
+                scenario_uuid: Uuid::parse_str(&scenario_uuid).unwrap(),
+                title,
+                description,
+                solved,
+                solved_description
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_countermeasures) => {
+                for countermeasure in fetched_countermeasures {
+                    countermeasures.push(countermeasure);
+                }
+            },
+            Err(_) => {
+                return countermeasures;
+            }
+        }
+
+        return countermeasures;
+    }
+
+    println!("No database connection");
+    return countermeasures;
+}
 
 
 

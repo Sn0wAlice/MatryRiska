@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Countermeasure Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+
+                    <div class="col-md-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col ">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 text-truncate">
+                                                <h5 class="m-0 fs-3 fw-bold">Countermeasure</h5>
+                                            </div>
+                                            <!--end media body-->
+                                        </div>
+                                        <!--end media-->
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <br>
+
+                                <p class="text-muted">
+                                    <b>Title: </b>{{title}}
+                                </p>
+
+                            </div>
+                            <!--end card-body-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                    <!--end col-->
+                    <div class="col-md-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row g-3">
+
+                                    
+                                    <div class="col-md-3 col-lg-3">
+                                        <div class="card shadow-none border mb-3 mb-lg-0">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-grow-1 text-truncate">
+                                                        <p class="text-dark mb-0 fw-semibold fs-13">
+                                                            Solved %
+                                                        </p>
+                                                        <h3 class="mt-1 mb-0 fs-18 fw-bold">
+                                                            {{solved}}%
+                                                        </h3>
+                                                    </div>
+                                                    <!--end media body-->
+                                                </div>
+                                            </div>
+                                            <!--end card-body-->
+                                        </div>
+                                        <!--end card-body-->
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        <div class="card shadow-none border mb-3 mb-lg-0">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-grow-1 text-truncate">
+                                                        <p class="text-dark mb-0 fw-semibold fs-13">Solved Description</p>
+                                                        <p class="text-muted">
+                                                            {{solved_description}}
+                                                        </p>
+                                                    </div>
+                                                    <!--end media body-->
+                                                </div>
+                                            </div>
+                                            <!--end card-body-->
+                                        </div>
+                                        <!--end card-body-->
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--end card-body-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="card">
+                            
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col ">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 text-truncate">
+                                                <h5 class="m-0 fs-3 fw-bold">Description</h5>
+                                            </div>
+                                            <!--end media body-->
+                                        </div>
+                                        <!--end media-->
+                                    </div>
+                                </div>
+                                <br>
+                                <p class="text-muted">{{description}}</p>
+                            </div>
+                            <!--end card-body-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                </div>
+
+
+
+            </div><!-- container -->
+
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+</body>
+<!--end body-->
+
+</html>

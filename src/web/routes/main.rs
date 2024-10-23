@@ -27,7 +27,8 @@ pub async fn main() -> String {
       .replace("{{sc_count}}", sc.len().to_string().as_str())
       .replace("{{ctm_count}}", ctm.len().to_string().as_str())
       .replace("{{avg_solved}}", avg.to_string().as_str())
-      .replace("{{risk_id}}", get_id(r.risk_uuid).as_str());
+      .replace("{{risk_id}}", get_id(r.risk_uuid).as_str())
+      .replace("{{risk_uuid}}", &r.risk_uuid.to_string());
     str.push_str(&new);
   }
 
