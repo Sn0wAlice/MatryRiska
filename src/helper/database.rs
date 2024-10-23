@@ -288,6 +288,45 @@ pub async fn update_risk(risk_uuid: String, risk_name: String, risk_description:
     return Err("No database connection".to_owned());
 }
 
+pub async fn delete_risk(risk_uuid: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM risk WHERE risk_uuid = '{}'", risk_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to delete risk".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
 // ------------ DATABASE SCENARIO ------------
 pub async fn get_all_scenario_of_risk(risk_uuid:String) -> Vec<Scenario> {
     // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
@@ -478,6 +517,45 @@ pub async fn update_scenario(scenario_uuid: String, scenario_description: String
     return Err("No database connection".to_owned());
 }
 
+pub async fn delete_scenario(scenario_uuid: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM scenario WHERE scenario_uuid = '{}'", scenario_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to delete scenario".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
 pub async fn get_scenario_risk(scenario_uuid:String) -> Vec<ScenarioRisk> {
     // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
     let lock_result = unsafe { DB_CLIENT.lock() };
@@ -605,6 +683,45 @@ pub async fn update_scenario_risk(scenario_uuid: String, likehood: i32, reputati
             },
             Err(_) => {
                 return Err("Failed to update scenario risk".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
+pub async fn delete_scenario_risk(scenario_uuid: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM scenario_risk WHERE scenario_uuid = '{}'", scenario_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to delete scenario risk".to_owned());
             }
         }
     }
@@ -860,4 +977,80 @@ pub async fn update_countermeasure(ctm_uuid: String, title: String, description:
     return Err("No database connection".to_owned());
 }
 
+pub async fn delete_countermeasure(ctm_uuid: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
 
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM countermeasure WHERE ctm_uuid = '{}'", ctm_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to delete countermeasure".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
+pub async fn delete_countermeasure_from_sc(scenario_uuid: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM countermeasure WHERE scenario_uuid = '{}'", scenario_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to delete countermeasure".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}

@@ -2,7 +2,7 @@
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
 use crate::helper::functions::{extract_string_from_obj_value,};
-use crate::helper::database::{Risk, Scenario, ScenarioRisk, get_risk_detail, create_new_scenario, create_scenario_risk, update_scenario, update_scenario_risk, get_scenario_detail};
+use crate::helper::database::{create_new_scenario, create_scenario_risk, delete_countermeasure_from_sc, delete_scenario, delete_scenario_risk, get_risk_detail, get_scenario_detail, update_scenario, update_scenario_risk, Risk, Scenario, ScenarioRisk};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -235,6 +235,42 @@ pub async fn update(body:Value) -> CustomizeResponder<HttpResponse> {
 
     // update the scenario risk
     let _ = update_scenario_risk(scenario_uuid.to_string(), sc_likehood, sc_reputational, sc_operational, sc_legal_compliance, sc_financial).await;
+
+    return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
+}
+
+pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
+
+    // check the body contain good key
+    for key in vec!["uuid"] {
+        if body.get(key).is_some() {
+            continue;
+        } else {
+            return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"missing_args\"}").customize();
+        }
+    }
+
+    let scenario_uuid = extract_string_from_obj_value(body.get("uuid"));
+
+    // check scenario_uuid is a valid uuid
+    let scenario_uuid = match uuid::Uuid::parse_str(&scenario_uuid) {
+        Ok(uuid) => uuid,
+        Err(_) => {
+            return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"invalid_uuid\"}").customize();
+        }
+    };
+
+    // check scenario exist
+    let scenario = get_scenario_detail(scenario_uuid.to_string()).await;
+
+    if scenario.is_empty() {
+        return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"scenario_not_found\"}").customize();
+    }
+
+    // delete the scenario
+    let _ = delete_scenario(scenario_uuid.to_string()).await;
+    let _ = delete_scenario_risk(scenario_uuid.to_string()).await;
+    let _ = delete_countermeasure_from_sc(scenario_uuid.to_string()).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

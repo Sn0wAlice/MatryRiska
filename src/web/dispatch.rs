@@ -23,14 +23,17 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
 
     path if path.starts_with("risk/detail/") => { content_body = risk::detail(path_arg).await; },
     path if path.starts_with("risk/update/") => { content_body = risk::update(path_arg).await; },
+    path if path.starts_with("risk/delete/") => { content_body = risk::delete(path_arg).await; },
 
     path if path.starts_with("scenario/create/") => { content_body = scenario::create(path_arg).await; },
     path if path.starts_with("scenario/detail/") => { content_body = scenario::detail(path_arg).await; },
     path if path.starts_with("scenario/update/") => { content_body = scenario::update(path_arg).await; },
+    path if path.starts_with("scenario/delete/") => { content_body = scenario::delete(path_arg).await; },
 
     path if path.starts_with("countermeasure/create/") => { content_body = countermeasure::create(path_arg).await; },
     path if path.starts_with("countermeasure/detail/") => { content_body = countermeasure::detail(path_arg).await; },
     path if path.starts_with("countermeasure/update/") => { content_body = countermeasure::update(path_arg).await; },
+    path if path.starts_with("countermeasure/delete/") => { content_body = countermeasure::delete(path_arg).await; },
 
     _ => {      
       content_body = "__404".to_string();

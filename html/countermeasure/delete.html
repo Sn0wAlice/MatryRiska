@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Countermeasure Delete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <link href="/assets/libs/vanillajs-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="row g-0 h-100">
+                                    <div class="col-lg-7 border-end">
+                                        <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Delete Countermeasure</h4>
+
+                                        <div class="p-4 pt-3">
+                                           <p>
+                                                Are you sure you want to delete this countermeasure?
+                                           </p>
+
+
+                                            <button type="submit" class="btn btn-primary" onclick="delete_me()">Delete Countermeasure</button>
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="document.location.href='/scenario/detail/{{scenario_uuid}}'">Cancel</button>
+                                        </div>
+                                        <!--end form-->
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-5 align-self-center">
+                                        <form class="p-4">
+                                            <div class="form-group">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/assets/imgs/logo.png" alt=""
+                                                        class="thumb-xxl rounded me-3">
+                                                    <!--end media body-->
+                                                </div>
+
+                                            </div>
+                                            <!--end form-group-->
+                                            <h5 class="fw-normal my-3 lh-lg">
+                                                Countermeasure is a set of actions that an organization can take to
+                                                prevent, detect, and respond to cybersecurity incidents.
+                                                <br>
+                                                Use this form to create a new countermeasure.
+                                            </h5>
+                                            {{inject_contributors}}
+                                        </form>
+
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/vanillajs-datepicker/js/datepicker-full.min.js"></script>
+    <script src="/assets/js/pages/projects-create.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+
+        async function delete_me() {
+            const body = {
+                uuid: '{{ctm_uuid}}',
+            }
+
+            // drop to the api 
+            const response = await fetch('/api/countermeasure/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await response.json()
+
+            if (data.status == 'success') {
+                document.location.href = '/scenario/detail/{{scenario_uuid}}'
+            } else {
+                alert('Failed to delete countermeasure')
+            }
+        }
+    </script>
+</body>
+<!--end body-->
+
+</html>

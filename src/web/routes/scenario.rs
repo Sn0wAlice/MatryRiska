@@ -122,6 +122,33 @@ pub async fn update(path:String) -> String {
 
 }
 
+pub async fn delete(path:String) -> String {
+    let scenario_uuid = path.replace("scenario/delete/", "");
+
+    // check if scenario is a valid uuid
+    if !is_uuid_v4(&scenario_uuid) {
+        return "__404".to_string();
+    }
+
+    // check if scenario exist
+    let scenario_detail = get_scenario_detail(scenario_uuid).await;
+
+    if scenario_detail.is_empty() {
+        return "__404".to_string();
+    }
+
+    let scenario_detail = scenario_detail.get(0).unwrap();
+
+
+    let index = fs::read_to_string("html/scenario/delete.html").unwrap()
+        .replace("{{scenario_uuid}}", scenario_detail.scenario_uuid.to_string().as_str())
+        .replace("{{scenario_note}}", scenario_detail.add_note.to_string().as_str())
+        .replace("{{scenario_description}}", scenario_detail.scenario_description.as_str())
+        .replace("{{scenario_threat}}", scenario_detail.threat_description.to_string().as_str());
+
+    return index;
+
+}
 
 // ----- Utils -----
 pub fn calculate_risk(e5: i32, f5: i32, g5: i32, h5: i32, i5: i32) -> &'static str {

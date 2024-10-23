@@ -94,6 +94,31 @@ pub async fn update(path: String) -> String {
 }
 
 
+pub async fn delete(path: String) -> String {
+  let risk_uuid = path.replace("risk/delete/", "");
+
+  if !is_uuid_v4(&risk_uuid) {
+    return "__404".to_string();
+  }
+
+  // get risk detail
+  let risk_detail = get_risk_detail(risk_uuid.clone()).await;
+  if risk_detail.is_empty() {
+    return "__404".to_string();
+  }
+
+  let risk_detail = risk_detail.get(0).unwrap();
+
+
+  let index = fs::read_to_string("html/risk/delete.html").unwrap()
+    .replace("{{risk_title}}", risk_detail.risk_name.as_str())
+    .replace("{{risk_uuid}}", risk_detail.risk_uuid.to_string().as_str())
+    .replace("{{risk_description}}", risk_detail.risk_description.as_str());
+
+  return index;
+}
+
+
 
 pub fn get_id(uuid:Uuid) -> String {
   // only keep the first 8 characters

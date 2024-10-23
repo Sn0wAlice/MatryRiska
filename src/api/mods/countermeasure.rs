@@ -4,7 +4,7 @@ use std::fs;
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
 use crate::helper::functions::{extract_string_from_obj_value, is_uuid_v4};
-use crate::helper::database::{Risk, create_countermeasure, get_scenario_detail, update_countermeasure};
+use crate::helper::database::{Risk, create_countermeasure, get_scenario_detail, update_countermeasure, delete_countermeasure};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -90,6 +90,30 @@ pub async fn update(body:Value) -> CustomizeResponder<HttpResponse> {
 
     // update the countermeasure
     let _ = update_countermeasure(ctm_uuid, doc_name, doc_description, solved, solved_description).await;
+
+    return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
+}
+
+pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
+
+    // check the body contain good key
+    for key in vec!["uuid"] {
+        if body.get(key).is_some() {
+            continue;
+        } else {
+            return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"missing_args\"}").customize();
+        }
+    }
+
+    let ctm_uuid = extract_string_from_obj_value(body.get("uuid"));
+
+    // check if ctm_uuid is a valid uuid
+    if !is_uuid_v4(&ctm_uuid) {
+        return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"invalid_uuid\"}").customize();
+    }
+
+    // delete the countermeasure
+    let _ = delete_countermeasure(ctm_uuid).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

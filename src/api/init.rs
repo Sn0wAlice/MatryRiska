@@ -44,17 +44,26 @@ pub async fn handler(path: web::Path<String>, mut payload: web::Payload, req: Ht
         "risk/update" => {
             return risk::update(parsed_json).await;
         }
+        "risk/delete" => {
+            return risk::delete(parsed_json).await;
+        }
         "scenario/create" => {
             return scenario::create(parsed_json).await;
         }
         "scenario/update" => {
             return scenario::update(parsed_json).await;
         }
+        "scenario/delete" => {
+            return scenario::delete(parsed_json).await;
+        }
         "countermeasure/create" => {
             return countermeasure::create(parsed_json).await;
         }
         "countermeasure/update" => {
             return countermeasure::update(parsed_json).await;
+        }
+        "countermeasure/delete" => {
+            return countermeasure::delete(parsed_json).await;
         }
         _ => {
             trace_logs("Path not found".to_string());
