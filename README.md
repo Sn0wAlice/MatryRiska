@@ -33,6 +33,12 @@ wget https://raw.githubusercontent.com/Sn0wAlice/MatryRiska/refs/heads/main/dock
 docker-compose up
 ```
 
+(arm64)
+```bash
+wget https://raw.githubusercontent.com/Sn0wAlice/MatryRiska/refs/heads/main/docker-compose-arm.yml
+docker-compose up
+```
+
 ### 2. Using cargo
 ```bash
 ## Step 1: configure mysql db (can use docker-compose-dev.yml)

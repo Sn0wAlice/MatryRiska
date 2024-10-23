@@ -46,7 +46,7 @@ pub async fn get_assets(path: web::Path<String>) -> impl Responder {
         };
 
         // return file (force type gif)
-        return HttpResponse::Ok().content_type(file_type.unwrap()["type"].as_str().unwrap()).body(file);
+        return HttpResponse::Ok().content_type(file_type.unwrap()["type"].as_str().unwrap()).insert_header(("Cache-Control", "3600")).body(file);
     }
 
     // return 404
