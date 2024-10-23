@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Risk create</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <link href="/assets/libs/vanillajs-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="row g-0 h-100">
+                                    <div class="col-lg-7 border-end">
+                                        <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Update Risk</h4>
+
+                                        <div class="p-4 pt-3">
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="projectName" class="form-label">Risk Name :</label>
+                                                <input type="text" class="form-control" id="risk_name"
+                                                    aria-describedby="emailHelp" placeholder="Enter an risk name" value="{{risk_title}}">
+                                            </div>
+
+                                            <!--end form-group-->
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="pro-message">Risk
+                                                    Description</label>
+                                                <textarea class="form-control" rows="5" id="risk_desk"
+                                                    placeholder="writing here..">{{risk_description}}</textarea>
+                                            </div>
+                                            <!--end form-group-->
+
+                                            <button type="submit" class="btn btn-primary" onclick="update()">Update Risk</button>
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="document.location.href='/main'">Cancel</button>
+                                        </div>
+                                        <!--end form-->
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-5 align-self-center">
+                                        <form class="p-4">
+                                            <div class="form-group">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/assets/imgs/logo.png" alt=""
+                                                        class="thumb-xxl rounded me-3">
+                                                    <!--end media body-->
+                                                </div>
+
+                                            </div>
+                                            <!--end form-group-->
+                                            <h5 class="fw-normal my-3 lh-lg">
+                                                Here you can create a new risk and start working on it.
+                                                <br>
+                                                Don't forget to be global and only detail the most important
+                                            </h5>
+                                            {{inject_contributors}}
+                                        </form>
+
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/vanillajs-datepicker/js/datepicker-full.min.js"></script>
+    <script src="/assets/js/pages/projects-create.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+
+        async function update() {
+            const body = {
+                name: document.getElementById('risk_name').value,
+                description: document.getElementById('risk_desk').value,
+                uuid: '{{risk_uuid}}'
+            }
+
+            console.log(body)
+
+            // drop to the api 
+            const response = await fetch('/api/risk/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await response.json()
+
+            if (data.status == 'success') {
+                document.location.href = '/risk/detail/{{risk_uuid}}'
+            } else {
+                alert('Failed to update risk')
+            }
+        }
+    </script>
+</body>
+<!--end body-->
+
+</html>

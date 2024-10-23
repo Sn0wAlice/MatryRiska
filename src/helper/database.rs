@@ -249,6 +249,45 @@ pub async fn get_risk_detail(risk_uuid:String) -> Vec<Risk> {
     return risks;
 }
 
+pub async fn update_risk(risk_uuid: String, risk_name: String, risk_description: String) -> Result<(), String> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("UPDATE risk SET risk_name = '{}', risk_description = '{}' WHERE risk_uuid = '{}'", risk_name, risk_description, risk_uuid);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return Ok(());
+            },
+            Err(_) => {
+                return Err("Failed to update risk".to_owned());
+            }
+        }
+    }
+
+    return Err("No database connection".to_owned());
+}
+
 // ------------ DATABASE SCENARIO ------------
 pub async fn get_all_scenario_of_risk(risk_uuid:String) -> Vec<Scenario> {
     // check if DB_CLIENT.lock().unwrap().is_none() return any poison error

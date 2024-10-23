@@ -40,6 +40,22 @@
     box-shadow: none
 }
 
+.btn-update {
+    background-color: var(--bs-yellow);
+}
+
+.btn-update:hover {
+    background-color: var(--bs-yellow);
+}
+
+.btn-delete {
+    background-color: var(--bs-danger);
+}
+
+.btn-delete:hover {
+    background-color: var(--bs-danger);
+}
+
 .btn-success {
     -webkit-box-shadow: 0 1px 2px 0 rgba(34, 197, 173, .35);
     box-shadow: 0 1px 2px 0 rgba(34, 197, 173, .35)

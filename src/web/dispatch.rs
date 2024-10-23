@@ -22,8 +22,11 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
 
 
     path if path.starts_with("risk/detail/") => { content_body = risk::detail(path_arg).await; },
+    path if path.starts_with("risk/update/") => { content_body = risk::update(path_arg).await; },
+
     path if path.starts_with("scenario/create/") => { content_body = scenario::create(path_arg).await; },
     path if path.starts_with("scenario/detail/") => { content_body = scenario::detail(path_arg).await; },
+
     path if path.starts_with("countermeasure/create/") => { content_body = countermeasure::create(path_arg).await; },
     path if path.starts_with("countermeasure/detail/") => { content_body = countermeasure::detail(path_arg).await; },
 

@@ -41,6 +41,9 @@ pub async fn handler(path: web::Path<String>, mut payload: web::Payload, req: Ht
         "risk/create" => {
             return risk::create(parsed_json).await;
         }
+        "risk/update" => {
+            return risk::update(parsed_json).await;
+        }
         "scenario/create" => {
             return scenario::create(parsed_json).await;
         }
