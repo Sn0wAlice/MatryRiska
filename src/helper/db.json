@@ -1,0 +1,102 @@
+[
+    {
+        "name": "risk",
+        "columns": [
+            {
+                "name": "risk_uuid",
+                "type": "varchar(36) primary key"
+            },
+            {
+                "name": "risk_name",
+                "type": "varchar(255) not null default 'New Risk'"
+            },
+            {
+                "name": "risk_description",
+                "type": "text not null"
+            }
+        ]
+    },
+    {
+        "name": "scenario",
+        "columns": [
+            {
+                "name": "scenario_uuid",
+                "type": "varchar(36) primary key"
+            },
+            {
+                "name": "risk_uuid",
+                "type": "varchar(36) not null"
+            },
+            {
+                "name": "scenario_description",
+                "type": "text not null"
+            },
+            {
+                "name": "threat_description",
+                "type": "text not null"
+            },
+            {
+                "name": "add_note",
+                "type": "text"
+            }
+        ]
+    },
+    {
+        "name": "scenario_risk",
+        "columns": [
+            {
+                "name": "scenario_uuid",
+                "type": "varchar(36) not null"
+            },
+            {
+                "name": "likehood",
+                "type": "int not null"
+            },
+            {
+                "name": "reputation",
+                "type": "int not null"
+            },
+            {
+                "name": "operational",
+                "type": "int not null"
+            },
+            {
+                "name": "legal_compliance",
+                "type": "int not null"
+            },
+            {
+                "name": "financial",
+                "type": "int not null"
+            }
+        ]
+    },
+    {
+        "name": "countermeasure",
+        "columns": [
+            {
+                "name": "ctm_uuid",
+                "type": "varchar(36) primary key"
+            },
+            {
+                "name": "scenario_uuid",
+                "type": "varchar(36) not null"
+            },
+            {
+                "name": "title",
+                "type": "varchar(255) not null default 'New Countermeasure'"
+            },
+            {
+                "name": "description",
+                "type": "text not null"
+            },
+            {
+                "name": "solved",
+                "type": "int not null default 0"
+            },
+            {
+                "name": "solved_description",
+                "type": "text"
+            }
+        ]
+    }
+]

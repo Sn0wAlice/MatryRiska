@@ -9,29 +9,10 @@ services:
       MYSQL_DATABASE: matryriska         # This creates the database on startup
       MYSQL_USER: matryriska             # Optional: Set up an additional user
       MYSQL_PASSWORD: StrongPassword123  # Optional: Set a password for the user
-    networks:
-      matryriska-net:
-        ipv4_address: 172.20.0.2         # Assign a fixed IP address
     volumes:
       - mysql_data:/var/lib/mysql        # Persist MySQL data
     ports:
       - "3306:3306"                      # Expose MySQL port
 
-  web:
-    image: ghcr.io/sn0walice/matryriska:latest
-    container_name: matryriska-web
-    networks:
-      matryriska-net:
-        ipv4_address: 172.20.0.3         # Assign a fixed IP address for the web container
-    ports:
-      - "8080:8080"                      # Expose the web service port
-
 volumes:
   mysql_data:
-
-networks:
-  matryriska-net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16          # Define a custom subnet

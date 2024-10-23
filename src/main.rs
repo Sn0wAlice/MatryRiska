@@ -6,6 +6,7 @@ use matryriska::{api,web,assets};
 
 // init the tracing module
 use matryriska::helper::trace::{init_trace,trace_logs};
+use matryriska::helper::start::startup;
 
 
 #[actix_web::main]
@@ -13,6 +14,8 @@ async fn main() -> std::io::Result<()> {
     println!("{}", fs::read_to_string("utils/ascii.art").unwrap().as_str());
     init_trace();
     trace_logs("Server is starting...".to_string());
+
+    startup().await;
     
     let port: u16 = 8080;
     HttpServer::new(|| {

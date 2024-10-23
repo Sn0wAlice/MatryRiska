@@ -84,9 +84,17 @@ async fn periodic_database() {
 }
 
 async fn reset_database() {
+
+    let mut h = "127.0.0.1";
+
+    // check if process arg --prod is used
+    if std::env::args().any(|arg| arg == "--prod") {
+        h = "172.20.0.2";
+    }
+
     // Define MySQL connection options
     let opts = mysql::OptsBuilder::new()
-        .ip_or_hostname(Some("mysql"))
+        .ip_or_hostname(Some(h))
         .db_name(Some("matryriska"))
         .user(Some("matryriska"))
         .pass(Some("StrongPassword123"));
@@ -1054,3 +1062,210 @@ pub async fn delete_countermeasure_from_sc(scenario_uuid: String) -> Result<(), 
 
     return Err("No database connection".to_owned());
 }
+
+
+
+
+
+
+
+
+
+
+// ------------ DATABASE UTILS ------------
+pub async fn check_if_table_exist(table_name:String) -> bool {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+
+        let query = format!("SELECT table_name FROM information_schema.tables WHERE table_name = '{}' LIMIT 1", table_name);
+
+        let result = conn.query_map(query, |(table_name): (String)| {
+            table_name
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_table) => {
+                if fetched_table.len() > 0 {
+                    return true;
+                }
+            },
+            Err(_) => {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    println!("No database connection");
+    return false;
+}
+
+pub async fn create_table(table_name:String, column:Vec<serde_json::Value>) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+
+        let mut query = format!("CREATE TABLE {} (", table_name);
+
+        for (i, col) in column.iter().enumerate() {
+            if i == column.len() - 1 {
+                query.push_str(&format!("{} {})", col["name"], col["type"]));
+            } else {
+                query.push_str(&format!("{} {}, ", col["name"], col["type"]));
+            }
+        }
+
+        query = query.replace("\"", "");
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn check_column_exist(table_name:String, column_name:String) -> bool {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+
+        let query = format!("SELECT column_name FROM information_schema.columns WHERE table_name = '{}' AND column_name = '{}' LIMIT 1", table_name, column_name);
+
+        let result = conn.query_map(query, |(column_name): (String)| {
+            column_name
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_column) => {
+                if fetched_column.len() > 0 {
+                    return true;
+                }
+            },
+            Err(_) => {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    println!("No database connection");
+    return false;
+}
+
+pub async fn add_column(table_name:String, column_name:String, column_type:String) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+
+        let query = format!("ALTER TABLE {} ADD COLUMN {} {}", table_name, column_name, column_type);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+
+
+
+
+
+
+
+
