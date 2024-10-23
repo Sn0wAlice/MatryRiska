@@ -86,7 +86,7 @@ async fn periodic_database() {
 async fn reset_database() {
     // Define MySQL connection options
     let opts = mysql::OptsBuilder::new()
-        .ip_or_hostname(Some("127.0.0.1"))
+        .ip_or_hostname(Some("mysql"))
         .db_name(Some("matryriska"))
         .user(Some("matryriska"))
         .pass(Some("StrongPassword123"));
