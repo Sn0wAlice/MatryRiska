@@ -7,6 +7,9 @@ use crate::helper::database::{check_if_table_exist, create_table, check_column_e
 pub async fn startup() {
     // check all the necessary database archi
 
+    // wait 5 secondes
+    std::thread::sleep(std::time::Duration::from_secs(5));
+
     let file = fs::read_to_string("assets/_internals/db.json").unwrap();
     // convert the string to json
     let json: Vec<serde_json::Value> = serde_json::from_str(&file).unwrap();
