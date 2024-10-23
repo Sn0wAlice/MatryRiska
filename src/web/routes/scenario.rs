@@ -72,6 +72,7 @@ pub async fn detail(path:String) -> String {
 
     let index = fs::read_to_string("html/scenario/detail.html").unwrap()
         .replace("{{scenario_uuid}}", scenario_detail.scenario_uuid.to_string().as_str())
+        .replace("{{scenario_note}}", scenario_detail.add_note.to_string().as_str())
         .replace("{{scenario_description}}", scenario_detail.scenario_description.as_str())
         .replace("{{scenario_threat}}", scenario_detail.threat_description.to_string().as_str())
         .replace("{{sc_likehood}}", scenario_risk.likehood.to_string().as_str())

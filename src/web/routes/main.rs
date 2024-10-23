@@ -1,7 +1,7 @@
 // export the home route handler
 use std::fs;
 
-use crate::web::routes::scenario::calculate_risk;
+use crate::web::routes::risk::get_id;
 use crate::helper::database::{Countermeasure, select_all_risk, get_all_scenario_of_risk, get_all_countermeasure_from_risk_uuid};
 
 #[tracing::instrument(level = "info")]
@@ -27,7 +27,7 @@ pub async fn main() -> String {
       .replace("{{sc_count}}", sc.len().to_string().as_str())
       .replace("{{ctm_count}}", ctm.len().to_string().as_str())
       .replace("{{avg_solved}}", avg.to_string().as_str())
-      .replace("{{risk_uuid}}", &r.risk_uuid.to_string());
+      .replace("{{risk_id}}", get_id(r.risk_uuid).as_str());
     str.push_str(&new);
   }
 

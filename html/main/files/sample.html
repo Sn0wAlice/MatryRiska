@@ -2,11 +2,16 @@
     <td>
         <a href="/risk/detail/{{risk_uuid}}">
             <p class="d-inline-block align-middle mb-0">
-                <span class="font-13 fw-medium">{{risk_name}}</span>
+                <a href="" class="d-inline-block align-middle mb-0 text-body">#{{risk_id}}</a>
             </p>
         </a>
     </td>
-    <td><a href="" class="d-inline-block align-middle mb-0 text-body">{{risk_uuid}}</a>
+    <td>
+        <a href="/risk/detail/{{risk_uuid}}">
+            <p class="d-inline-block align-middle mb-0">
+                <span class="font-13 fw-medium">{{risk_name}}</span>
+            </p>
+        </a>
     </td>
     <td><span class="badge bg-danger-subtle text-danger">{{avg_solved}}%</span></td>
     <td>{{sc_count}}</td>
