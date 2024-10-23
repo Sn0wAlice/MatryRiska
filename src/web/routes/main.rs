@@ -43,8 +43,11 @@ pub async fn main() -> String {
 fn average_resolution(ctm_list: Vec<Countermeasure>) -> f64 {
   let mut total = 0.0;
   for ctm in &ctm_list {
-    total += ctm.solved as f64;
+      total += ctm.solved as f64;
   }
 
-  return total / ctm_list.len() as f64;
+  let average = total / ctm_list.len() as f64;
+
+  // Keep only 2 decimal places
+  (average * 100.0).round() / 100.0
 }
