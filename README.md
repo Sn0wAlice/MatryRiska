@@ -23,6 +23,16 @@ Key Features:
 - Web-Based: Accessible from any modern browser, enabling seamless interaction with risk data.
 - Docker Support: Fully containerized with Docker, making deployment and scaling straightforward and efficient.
 
+<details open>
+<summary>See previews 📸</summary>
+<br>
+
+You Can go here <a href="https://github.com/Sn0wAlice/MatryRiska/wiki/Page-preview">Click here for more preview</a>
+
+<img src="./.github/demo/preview-01.png">
+
+</details>
+
 ## Getting Started
 
 You can run the applicaiton using either docker or cargo. But we strongly recommend using **docker** for the ease of use.
