@@ -14,7 +14,7 @@ create table scenario (
 
 create table scenario_risk (
     scenario_uuid varchar(36) not null,
-    likehood int not null,
+    likelihood int not null,
     reputation int not null,
     operational int not null,
     legal_compliance int not null,
