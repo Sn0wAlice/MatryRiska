@@ -62,9 +62,9 @@
                                                 <div class="row">
                                                     <div class="col-lg-3 col-6 mb-2 mb-lg-1">
                                                         <label class="form-label mt-2" for="pro-price-type">
-                                                            LikeHood
+                                                            likelihood
                                                         </label>
-                                                        <select class="form-select" name="likehood">
+                                                        <select class="form-select" name="likelihood">
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
@@ -200,7 +200,7 @@
         async function update() {
             let sc_scenario_description = document.getElementById('sc_scenario_description').value;
             let sc_threat_description = document.getElementById('sc_threat_description').value;
-            let sc_likehood = document.getElementsByName('likehood')[0].value;
+            let sc_likelihood = document.getElementsByName('likelihood')[0].value;
             let sc_reputational = document.getElementsByName('reputational')[0].value;
             let sc_operational = document.getElementsByName('operational')[0].value;
             let sc_legal_compliance = document.getElementsByName('legal_compliance')[0].value;
@@ -211,7 +211,7 @@
                 uuid: '{{scenario_uuid}}',
                 sc_scenario_description: sc_scenario_description,
                 sc_threat_description: sc_threat_description,
-                sc_likehood: sc_likehood,
+                sc_likelihood: sc_likelihood,
                 sc_reputational: sc_reputational,
                 sc_operational: sc_operational,
                 sc_legal_compliance: sc_legal_compliance,
