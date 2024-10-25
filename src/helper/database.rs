@@ -37,7 +37,7 @@ pub struct Scenario {
 #[derive(Debug, Clone)]
 pub struct ScenarioRisk {
     pub scenario_uuid: Uuid,
-    pub likehood: i32,
+    pub likelihood: i32,
     pub reputation: i32,
     pub operational: i32,
     pub legal_compliance: i32,
@@ -590,10 +590,10 @@ pub async fn get_scenario_risk(scenario_uuid:String) -> Vec<ScenarioRisk> {
         let mut conn = pool.get_conn().unwrap();
         let query = format!("SELECT * FROM scenario_risk WHERE scenario_uuid = '{}' ORDER BY scenario_uuid ASC", scenario_uuid);
 
-        let result = conn.query_map(query, |(scenario_uuid, likehood, reputation, operational, legal_compliance, financial): (String, i32, i32, i32, i32, i32)| {
+        let result = conn.query_map(query, |(scenario_uuid, likelihood, reputation, operational, legal_compliance, financial): (String, i32, i32, i32, i32, i32)| {
             ScenarioRisk {
                 scenario_uuid: Uuid::parse_str(&scenario_uuid).unwrap(),
-                likehood,
+                likelihood,
                 reputation,
                 operational,
                 legal_compliance,
@@ -620,7 +620,7 @@ pub async fn get_scenario_risk(scenario_uuid:String) -> Vec<ScenarioRisk> {
     return scenarios;
 }
 
-pub async fn create_scenario_risk(scenario_uuid: String, likehood: i32, reputation: i32, operational: i32, legal_compliance: i32, financial: i32) -> Result<(), String> {
+pub async fn create_scenario_risk(scenario_uuid: String, likelihood: i32, reputation: i32, operational: i32, legal_compliance: i32, financial: i32) -> Result<(), String> {
     // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
     let lock_result = unsafe { DB_CLIENT.lock() };
 
@@ -642,7 +642,7 @@ pub async fn create_scenario_risk(scenario_uuid: String, likehood: i32, reputati
 
     if let Some(pool) = db_client {
         let mut conn = pool.get_conn().unwrap();
-        let query = format!("INSERT INTO scenario_risk (scenario_uuid, likehood, reputation, operational, legal_compliance, financial) VALUES ('{}', '{}', '{}', '{}', '{}', '{}')", scenario_uuid, likehood, reputation, operational, legal_compliance, financial);
+        let query = format!("INSERT INTO scenario_risk (scenario_uuid, likelihood, reputation, operational, legal_compliance, financial) VALUES ('{}', '{}', '{}', '{}', '{}', '{}')", scenario_uuid, likelihood, reputation, operational, legal_compliance, financial);
 
         let result = conn.query_drop(query);
 
@@ -659,7 +659,7 @@ pub async fn create_scenario_risk(scenario_uuid: String, likehood: i32, reputati
     return Err("No database connection".to_owned());
 }
 
-pub async fn update_scenario_risk(scenario_uuid: String, likehood: i32, reputation: i32, operational: i32, legal_compliance: i32, financial: i32) -> Result<(), String> {
+pub async fn update_scenario_risk(scenario_uuid: String, likelihood: i32, reputation: i32, operational: i32, legal_compliance: i32, financial: i32) -> Result<(), String> {
     // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
     let lock_result = unsafe { DB_CLIENT.lock() };
 
@@ -681,7 +681,7 @@ pub async fn update_scenario_risk(scenario_uuid: String, likehood: i32, reputati
 
     if let Some(pool) = db_client {
         let mut conn = pool.get_conn().unwrap();
-        let query = format!("UPDATE scenario_risk SET likehood = '{}', reputation = '{}', operational = '{}', legal_compliance = '{}', financial = '{}' WHERE scenario_uuid = '{}'", likehood, reputation, operational, legal_compliance, financial, scenario_uuid);
+        let query = format!("UPDATE scenario_risk SET likelihood = '{}', reputation = '{}', operational = '{}', legal_compliance = '{}', financial = '{}' WHERE scenario_uuid = '{}'", likelihood, reputation, operational, legal_compliance, financial, scenario_uuid);
 
         let result = conn.query_drop(query);
 

@@ -75,11 +75,11 @@ pub async fn detail(path:String) -> String {
         .replace("{{scenario_note}}", scenario_detail.add_note.to_string().as_str())
         .replace("{{scenario_description}}", scenario_detail.scenario_description.as_str())
         .replace("{{scenario_threat}}", scenario_detail.threat_description.to_string().as_str())
-        .replace("{{sc_likehood}}", scenario_risk.likehood.to_string().as_str())
+        .replace("{{sc_likelihood}}", scenario_risk.likelihood.to_string().as_str())
         .replace("{{sc_operational}}", scenario_risk.operational.to_string().as_str())
         .replace("{{sc_legal_compliance}}", scenario_risk.legal_compliance.to_string().as_str())
         .replace("{{sc_financial}}", scenario_risk.financial.to_string().as_str())
-        .replace("{{sc_final_risk}}", calculate_risk(scenario_risk.likehood, scenario_risk.operational, scenario_risk.legal_compliance, scenario_risk.financial, scenario_risk.reputation))
+        .replace("{{sc_final_risk}}", calculate_risk(scenario_risk.likelihood, scenario_risk.operational, scenario_risk.legal_compliance, scenario_risk.financial, scenario_risk.reputation))
         .replace("{{sc_reputation}}", scenario_risk.reputation.to_string().as_str())
         .replace("{{ctm_list}}", countermeasure_html.as_str());
 
@@ -112,7 +112,7 @@ pub async fn update(path:String) -> String {
         .replace("{{scenario_note}}", scenario_detail.add_note.to_string().as_str())
         .replace("{{scenario_description}}", scenario_detail.scenario_description.as_str())
         .replace("{{scenario_threat}}", scenario_detail.threat_description.to_string().as_str())
-        .replace("{{sc_likehood}}", scenario_risk.likehood.to_string().as_str())
+        .replace("{{sc_likelihood}}", scenario_risk.likelihood.to_string().as_str())
         .replace("{{sc_operational}}", scenario_risk.operational.to_string().as_str())
         .replace("{{sc_legal_compliance}}", scenario_risk.legal_compliance.to_string().as_str())
         .replace("{{sc_financial}}", scenario_risk.financial.to_string().as_str())
