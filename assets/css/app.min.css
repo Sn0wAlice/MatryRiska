@@ -673,7 +673,7 @@ input.add-file-input {
     position: relative;
     min-height: calc(100vh - var(--bs-topbar-height));
     padding: 0 8px 68px 8px;
-    margin-top: var(--bs-topbar-height)
+    margin-top: 40px
 }
 
 .page-wrapper .page-content .page-title-box {

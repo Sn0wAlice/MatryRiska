@@ -1,14 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatryRiska</title>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Home page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+
 </head>
+
+
+<!-- Top Bar Start -->
+
 <body>
-    <p>Redirect</p>
-    <script>
-        window.location.href = '/main';
-    </script>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h4 class="card-title pt-2 fw-semibold mb-2 fs-18">
+                                    Welcome to MatryRiska 🪆
+                                </h4>
+                            </div>
+                            <!--end card-header-->
+                            <div class="card-body pt-0">
+                                <div class="row">
+
+                                    <div class="col-lg-12">
+                                        <div class=" p-4 rounded mb-3 border-dashed border-theme-color">
+                                            <div class="mb-2">
+                                                <div
+                                                    class="d-inline-flex justify-content-center align-items-center thumb-md card-bg border border border-secondary-subtle  rounded mx-auto">
+                                                    <i class="iconoir-fish h5 align-self-center mb-0 text-dark"></i>
+                                                </div>
+                                                <h6 class="fs-15 d-inline-block ms-1"> What is MatryRiska ?</h6>
+                                            </div>
+                                            <p class="fs-14 ms-45 text-muted mb-0">
+                                                MatryRiska is a fast, secure, and efficient risk management platform
+                                                that empowers users to manage their risks more effectively. Built with
+                                                Rust, a systems programming language known for its performance and
+                                                security, MatryRiska leverages modern web technologies to deliver an
+                                                intuitive and powerful interface.
+
+                                                You can find tips and tricks on how to make a risk analysis right here
+                                                ^^
+                                            </p>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Cycle -->
+                                    <div class="col-lg-12" style="display: flex; gap: 15px;">
+                                        <div class="col-lg-6">
+                                            <div class=" p-4 rounded mb-3 border-dashed border-theme-color"  style="height: 100%;">
+                                                <div class="mb-2">
+                                                    <div
+                                                        class="d-inline-flex justify-content-center align-items-center thumb-md card-bg border border border-secondary-subtle  rounded mx-auto">
+                                                        <i
+                                                            class="iconoir-filter-list-circle h5 align-self-center mb-0 text-dark"></i>
+                                                    </div>
+                                                    <h6 class="fs-15 d-inline-block ms-1"> Cycle 1 : Global Inspection
+                                                    </h6>
+                                                </div>
+                                                <p class="fs-14 ms-45 text-muted mb-0">
+                                                    The first cycle, Global Inspection, serves as the foundation for
+                                                    understanding the scope and impact of the organization’s activities.
+                                                    It begins with identifying core missions and the associated business
+                                                    value, establishing a clear picture of what is essential to the
+                                                    organization’s success. From this foundation, a comprehensive list
+                                                    of potential risk events is compiled, highlighting situations or
+                                                    incidents that could disrupt operations or impact value. Finally, a
+                                                    gap analysis identifies discrepancies or vulnerabilities between
+                                                    current practices and optimal standards, allowing the organization
+                                                    to prioritize areas for improvement in subsequent cycles.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class=" p-4 rounded mb-3 border-dashed border-theme-color"  style="height: 100%;">
+                                                <div class="mb-2">
+                                                    <div
+                                                        class="d-inline-flex justify-content-center align-items-center thumb-md card-bg border border border-secondary-subtle  rounded mx-auto">
+                                                        <i
+                                                            class="iconoir-network-right h5 align-self-center mb-0 text-dark"></i>
+                                                    </div>
+                                                    <h6 class="fs-15 d-inline-block ms-1"> Cycle 1 : Tasks</h6>
+                                                </div>
+                                                <p class="fs-14 ms-45 text-muted mb-0">
+                                                    - Identify core missions and business value <br>
+                                                    - Compile a list of potential risk events <br>
+                                                    - Conduct a gap analysis to identify<br>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                            <!--end card-body-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+                <!--end row-->
+            </div><!-- container -->
+
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+
+    <script src="/assets/js/app.js"></script>
 </body>
+<!--end body-->
+
 </html>
