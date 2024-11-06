@@ -98,5 +98,72 @@
                 "type": "text"
             }
         ]
+    },
+    {
+        "name": "c1_mission",
+        "columns": [
+            {
+                "name": "mission_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "mission_name",
+                "type": "varchar(255) not null"
+            }
+        ]
+    },
+    {
+        "name": "c1_valeur_metier",
+        "columns": [
+            {
+                "name": "valeur_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "mission_id",
+                "type": "int not null"
+            },
+            {
+                "name": "valeur_name",
+                "type": "varchar(255) not null"
+            },
+            {
+                "name": "valeur_nature",
+                "type": "varchar(50)"
+            },
+            {
+                "name": "valeur_description",
+                "type": "text"
+            },
+            {
+                "name": "responsable",
+                "type": "varchar(255)"
+            }
+        ]
+    },
+    {
+        "name": "c1_bien_support",
+        "columns": [
+            {
+                "name": "support_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "valeur_id",
+                "type": "int not null"
+            },
+            {
+                "name": "support_name",
+                "type": "varchar(255)"
+            },
+            {
+                "name": "support_description",
+                "type": "text"
+            },
+            {
+                "name": "support_responsable",
+                "type": "varchar(255)"
+            }
+        ]
     }
 ]

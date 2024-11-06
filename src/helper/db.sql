@@ -29,3 +29,29 @@ create table countermeasure(
     solved int not null default 0,
     solved_description text
 );
+
+
+-- Table for Missions
+CREATE TABLE c1_mission (
+    mission_id INT PRIMARY KEY AUTO_INCREMENT,
+    mission_name VARCHAR(255) NOT NULL
+);
+
+-- Table for Business Values
+CREATE TABLE c1_valeur_metier (
+    valeur_id INT PRIMARY KEY AUTO_INCREMENT,
+    mission_id INT,
+    valeur_name VARCHAR(255) NOT NULL,
+    valeur_nature VARCHAR(50),  -- e.g., 'Processus' or 'Information'
+    valeur_description TEXT,
+    responsable VARCHAR(255),   -- Responsible entity or person
+);
+
+-- Table for Associated Assets and Supports
+CREATE TABLE c1_bien_support (
+    support_id INT PRIMARY KEY AUTO_INCREMENT,
+    valeur_id INT,
+    support_name VARCHAR(255),
+    support_description TEXT,
+    support_responsable VARCHAR(255), -- Responsible entity or person for this support
+);

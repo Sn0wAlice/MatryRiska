@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 use std::result::Result;
 use serde_json::json;
-use crate::api::mods::scenario;
+use crate::api::mods::{mission, scenario};
 use crate::helper::trace::trace_logs;
 
 use std::sync::{Arc, Mutex};
@@ -53,6 +53,33 @@ pub struct Countermeasure {
     pub solved: i32,
     pub solved_description: String,
 }
+
+// C1
+#[derive(Debug, Clone)]
+pub struct Mission {
+    pub mission_id: i32,
+    pub mission_name: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ValeurMetier {
+    pub valeur_id: i32,
+    pub mission_id: i32,
+    pub valeur_name: String,
+    pub valeur_nature: String,
+    pub valeur_description: String,
+    pub responsable: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct BienSupport {
+    pub support_id: i32,
+    pub valeur_id: i32,
+    pub support_name: String,
+    pub support_description: String,
+    pub support_responsable: String,
+}
+
 
 
 // ------------ DATABASE SYSTEM ------------
@@ -1064,8 +1091,517 @@ pub async fn delete_countermeasure_from_sc(scenario_uuid: String) -> Result<(), 
 }
 
 
+// ------------ DATABASE C1 ------------
+pub async fn c1_get_all_missions() -> Vec<Mission> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
 
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
 
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    let mut missions: Vec<Mission> = Vec::new();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM c1_mission ORDER BY mission_id ASC");
+
+        let result = conn.query_map(query, |(mission_id, mission_name): (i32, String)| {
+            Mission {
+                mission_id,
+                mission_name
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_missions) => {
+                for mission in fetched_missions {
+                    missions.push(mission);
+                }
+            },
+            Err(_) => {
+                return missions;
+            }
+        }
+
+        return missions;
+    }
+
+    println!("No database connection");
+    return missions;
+}
+
+pub async fn c1_create_mission(mission_name: String) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("INSERT INTO c1_mission (mission_name) VALUES ('{}')", mission_name);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_get_mission_by_id(mission_id:i32) -> Vec<Mission> {
+        // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    let mut missions: Vec<Mission> = Vec::new();
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM c1_mission WHERE mission_id = '{}' ORDER BY mission_id ASC", mission_id);
+
+        let result = conn.query_map(query, |(mission_id, mission_name): (i32, String)| {
+            Mission {
+                mission_id,
+                mission_name
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_missions) => {
+                for mission in fetched_missions {
+                    missions.push(mission);
+                }
+            },
+            Err(_) => {
+                return missions;
+            }
+        }
+
+        return missions;
+    }
+
+    println!("No database connection");
+    return missions;
+}
+
+pub async fn c1_get_all_valeurmetier(mission_id:i32) -> Vec<ValeurMetier> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    let mut valeurs: Vec<ValeurMetier> = Vec::new();
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM c1_valeur_metier WHERE mission_id = '{}' ORDER BY valeur_id ASC", mission_id);
+
+        let result = conn.query_map(query, |(valeur_id, mission_id, valeur_name, valeur_nature, valeur_description, responsable): (i32, i32, String, String, String, String)| {
+            ValeurMetier {
+                valeur_id,
+                mission_id,
+                valeur_name,
+                valeur_nature,
+                valeur_description,
+                responsable,
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_valeurs) => {
+                for valeur in fetched_valeurs {
+                    valeurs.push(valeur);
+                }
+            },
+            Err(_) => {
+                return valeurs;
+            }
+        }
+
+        return valeurs;
+    }
+
+    println!("No database connection");
+    return valeurs;
+}
+
+pub async fn c1_create_valeurmetier(mission_id: i32, valeur_name: String, valeur_nature: String, valeur_description: String, responsable: String) {
+        // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("INSERT INTO c1_valeur_metier (mission_id, valeur_name, valeur_nature, valeur_description, responsable) VALUES ('{}', '{}', '{}', '{}', '{}')", mission_id, valeur_name, valeur_nature, valeur_description, responsable);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_get_valermetier_by_id(vm_id:i32) -> Vec<ValeurMetier> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    let mut valeurs: Vec<ValeurMetier> = Vec::new();
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM c1_valeur_metier WHERE valeur_id = '{}' ORDER BY valeur_id ASC", vm_id);
+
+        let result = conn.query_map(query, |(valeur_id, mission_id, valeur_name, valeur_nature, valeur_description, responsable): (i32, i32, String, String, String, String)| {
+            ValeurMetier {
+                valeur_id,
+                mission_id,
+                valeur_name,
+                valeur_nature,
+                valeur_description,
+                responsable,
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_valeurs) => {
+                for valeur in fetched_valeurs {
+                    valeurs.push(valeur);
+                }
+            },
+            Err(_) => {
+                return valeurs;
+            }
+        }
+
+        return valeurs;
+    }
+
+    println!("No database connection");
+    return valeurs;
+}
+
+pub async fn c1_create_asset(vm_id: i32, asset_name: String, asset_description: String, owner: String) {
+        // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("INSERT INTO c1_bien_support (valeur_id, support_name, support_description, support_responsable) VALUES ('{}', '{}', '{}', '{}')", vm_id, asset_name, asset_description, owner);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_get_asset_by_vmid(vm_id:i32) -> Vec<BienSupport> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    let mut assets: Vec<BienSupport> = Vec::new();
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM c1_bien_support WHERE valeur_id = '{}' ORDER BY support_id ASC", vm_id);
+
+        let result = conn.query_map(query, |(support_id, valeur_id, support_name, support_description, support_responsable): (i32, i32, String, String, String)| {
+            BienSupport {
+                support_id,
+                valeur_id,
+                support_name,
+                support_description,
+                support_responsable
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_assets) => {
+                for asset in fetched_assets {
+                    assets.push(asset);
+                }
+            },
+            Err(_) => {
+                return assets;
+            }
+        }
+
+        return assets;
+    }
+
+    println!("No database connection");
+    return assets;
+}
+
+pub async fn c1_delete_asset_by_id(asset_id:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM c1_bien_support WHERE support_id = '{}'", asset_id);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_delete_vm_by_id(vm_id: i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM c1_valeur_metier WHERE valeur_id = '{}'", vm_id);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_delete_mission_by_id(mission_id: i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM c1_mission WHERE mission_id = '{}'", mission_id);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
 
 
 

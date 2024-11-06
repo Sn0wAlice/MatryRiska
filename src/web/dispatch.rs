@@ -21,6 +21,9 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
     "risk/create" => { content_body = risk::create().await; },
 
 
+    path if path.starts_with("c1/") => { content_body = c1::c1(path_arg).await; },
+
+
     path if path.starts_with("risk/detail/") => { content_body = risk::detail(path_arg).await; },
     path if path.starts_with("risk/update/") => { content_body = risk::update(path_arg).await; },
     path if path.starts_with("risk/delete/") => { content_body = risk::delete(path_arg).await; },

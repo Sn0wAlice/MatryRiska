@@ -1,0 +1,21 @@
+<tr id="asset_{{asset_id}}">
+    <td>
+        <a href="#">
+            <p class="d-inline-block align-middle mb-0">
+                <a href="" class="d-inline-block align-middle mb-0 text-body">#{{asset_id}}</a>
+            </p>
+        </a>
+    </td>
+    <td>
+        <a href="#">
+            <p class="d-inline-block align-middle mb-0">
+                <span class="font-13 fw-medium">{{asset_name}}</span>
+            </p>
+        </a>
+    </td>
+    <td>{{asset_description}}</td>
+    <td>{{asset_owner}}</td>
+    <td class="text-end" onclick="delete_asset('{{asset_id}}')">
+        <a href="#"><i class="iconoir-bin-half text-secondary fs-18"></i></a>
+    </td>
+</tr>

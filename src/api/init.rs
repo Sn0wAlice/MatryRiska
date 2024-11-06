@@ -65,6 +65,28 @@ pub async fn handler(path: web::Path<String>, mut payload: web::Payload, req: Ht
         "countermeasure/delete" => {
             return countermeasure::delete(parsed_json).await;
         }
+
+        "mission/create" => {
+            return mission::create(parsed_json).await;
+        }
+        "mission/delete" => {
+            return mission::delete(parsed_json).await;
+        }
+        
+        "vm/create" => {
+            return vm::create(parsed_json).await;
+        }
+        "vm/delete" => {
+            return vm::delete(parsed_json).await;
+        }
+        
+        "asset/create" => {
+            return asset::create(parsed_json).await;
+        }
+        "asset/delete" => {
+            return asset::delete(parsed_json).await;
+        }
+
         _ => {
             trace_logs("Path not found".to_string());
             return HttpResponse::Ok().content_type("application/json").body("{\"error\": \"path not found\"}").customize();
