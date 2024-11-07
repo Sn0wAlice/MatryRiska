@@ -55,3 +55,11 @@ CREATE TABLE c1_bien_support (
     support_description TEXT,
     support_responsable VARCHAR(255), -- Responsible entity or person for this support
 );
+
+CREATE TABLE c1_feared_event (
+    event_id INT PRIMARY KEY AUTO_INCREMENT,
+    valeur_metier int not null,
+    evenement_redoute TEXT NOT NULL,
+    impact TEXT NOT NULL,
+    gravite INT NOT NULL
+);

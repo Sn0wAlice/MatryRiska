@@ -81,6 +81,15 @@ pub struct BienSupport {
 }
 
 
+#[derive(Debug, Clone)]
+pub struct FearedEvent {
+    pub event_id: i32,
+    pub valeur_metier: i32,
+    pub evenement_redoute: String,
+    pub impact: String,
+    pub gravite: i32,
+}
+
 
 // ------------ DATABASE SYSTEM ------------
 
@@ -1292,6 +1301,62 @@ pub async fn c1_get_all_valeurmetier(mission_id:i32) -> Vec<ValeurMetier> {
     return valeurs;
 }
 
+pub async fn c1_get_all_valeurmetier_no_limit() -> Vec<ValeurMetier> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    let mut valeurs: Vec<ValeurMetier> = Vec::new();
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("SELECT * FROM c1_valeur_metier ORDER BY valeur_id ASC");
+
+        let result = conn.query_map(query, |(valeur_id, mission_id, valeur_name, valeur_nature, valeur_description, responsable): (i32, i32, String, String, String, String)| {
+            ValeurMetier {
+                valeur_id,
+                mission_id,
+                valeur_name,
+                valeur_nature,
+                valeur_description,
+                responsable,
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_valeurs) => {
+                for valeur in fetched_valeurs {
+                    valeurs.push(valeur);
+                }
+            },
+            Err(_) => {
+                return valeurs;
+            }
+        }
+
+        return valeurs;
+    }
+
+    println!("No database connection");
+    return valeurs;
+}
+
 pub async fn c1_create_valeurmetier(mission_id: i32, valeur_name: String, valeur_nature: String, valeur_description: String, responsable: String) {
         // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
     let lock_result = unsafe { DB_CLIENT.lock() };
@@ -1603,6 +1668,142 @@ pub async fn c1_delete_mission_by_id(mission_id: i32) {
     return;
 }
 
+pub async fn c1_feared_event_create(event_name:String, impacts:String, valeur_metier_id:i32, gravity:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("INSERT INTO c1_feared_event (evenement_redoute, impact, valeur_metier, gravite) VALUES ('{}', '{}', '{}', '{}')", event_name, impacts, valeur_metier_id, gravity);
+
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_delete_feared_event(event_id:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        let query = format!("DELETE FROM c1_feared_event WHERE event_id = '{}'", event_id);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_get_all_feared_event() -> Vec<FearedEvent> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    let mut events: Vec<FearedEvent> = Vec::new();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+
+        let query = format!("SELECT event_id, evenement_redoute, impact, valeur_metier, gravite FROM c1_feared_event ORDER BY event_id ASC");
+   
+        let result = conn.query_map(query, |(event_id, evenement_redoute, impact, valeur_metier, gravite): (i32, String, String, i32, i32)| {
+            FearedEvent {
+                event_id,
+                evenement_redoute,
+                impact,
+                valeur_metier,
+                gravite
+            }
+        });
+
+        // check how many rows are returned
+        match result {
+            Ok(fetched_events) => {
+                for event in fetched_events {
+                    events.push(event);
+                }
+            },
+            Err(_) => {
+                return events;
+            }
+        }
+
+        return events;
+    }
+
+    println!("No database connection");
+    return events;
+}
 
 
 

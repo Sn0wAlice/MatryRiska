@@ -165,5 +165,30 @@
                 "type": "varchar(255)"
             }
         ]
+    },
+    {
+        "name": "c1_feared_event",
+        "columns": [
+            {
+                "name": "event_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "valeur_metier",
+                "type": "int not null"
+            },
+            {
+                "name": "evenement_redoute",
+                "type": "text not null"
+            },
+            {
+                "name": "impact",
+                "type": "text not null"
+            },
+            {
+                "name": "gravite",
+                "type": "int not null"
+            }
+        ]
     }
 ]

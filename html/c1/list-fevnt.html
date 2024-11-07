@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Feared events</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <link href="/assets/libs/simple-datatables/style.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h4 class="card-title">Your feared events</h4>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-auto">
+                                        <div class="row g-2">
+
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    onclick="document.location.href='/c1/fevnt/create'" data-bs-target="#addBoard"><i
+                                                        class="fa-solid fa-plus me-1"></i>
+                                                    Add New event
+                                                </button>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion" id="accordion-howto" style="margin-top: 15px;">
+                                        <div class="accordion-item">
+                                            <h5 class="accordion-header m-0" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseOne" aria-expanded="true"
+                                                    aria-controls="collapseOne">
+                                                    What is a feared event?
+                                                </button>
+                                            </h5>
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionExample-faq">
+                                                <div class="accordion-body">
+
+                                                    A feared event is an event that you are afraid of. It can be
+                                                    anything from a natural disaster to a personal event.
+
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered mb-0 table-centered">
+                                                                <thead style="border-radius: 0px;">
+                                                                    <tr style="border-radius: 0px;">
+                                                                        <th
+                                                                            style="background-color: rgb(180, 180, 180);">
+                                                                            Gravity Name</th>
+                                                                        <th
+                                                                            style="background-color: rgb(180, 180, 180);">
+                                                                            Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td
+                                                                            style="background-color: rgb(255, 148, 148);">
+                                                                            G4</td>
+                                                                        <td>
+                                                                            <b>Inability to maintain operations</b>: The
+                                                                            company is unable to sustain all or part of
+                                                                            its activities, with potentially severe
+                                                                            impacts on the safety of people and assets.
+                                                                            The company is unlikely to overcome this
+                                                                            situation, posing a threat to its survival.
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td
+                                                                            style="background-color: rgb(255, 187, 148);">
+                                                                            G3</td>
+                                                                        <td>
+                                                                            <b>Severe performance degradation</b>: The
+                                                                            company’s activity suffers significant
+                                                                            setbacks, possibly impacting the safety of
+                                                                            people and assets. The situation can be
+                                                                            overcome, but only with serious difficulty,
+                                                                            forcing operations into a highly degraded
+                                                                            mode.
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td
+                                                                            style="background-color: rgb(255, 234, 148);">
+                                                                            G2</td>
+                                                                        <td>
+                                                                            <b>Moderate performance degradation</b>: The
+                                                                            company experiences a decline in activity
+                                                                            performance without affecting the safety of
+                                                                            people and assets. While the situation
+                                                                            presents challenges, it can be managed,
+                                                                            though in a degraded mode.
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td
+                                                                            style="background-color: rgb(187, 255, 148);">
+                                                                            G1</td>
+                                                                        <td>
+                                                                            <b>Minimal impact</b>: There is no
+                                                                            operational or
+                                                                            performance impact on activities, nor on the
+                                                                            safety of people and assets. The company
+                                                                            will handle the situation with minor
+                                                                            difficulties, consuming available margins to
+                                                                            adapt.
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <!--end /table-->
+                                                        </div>
+                                                        <!--end /tableresponsive-->
+                                                    </div>
+                                                    <!--end card-body-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                            <!--end card-header-->
+                            <div class="card-body pt-0">
+
+                                <div class="table-responsive">
+                                    <table class="table mb-0 checkbox-all" id="datatable_1">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Event id</th>
+                                                <th>Business value</th>
+                                                <th>Event detail</th>
+                                                <th>Inpacts</th>
+                                                <th>Gravity</th>
+                                                <th class="text-end">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {{fevnt_list}}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+            {{inject_footer}}
+
+            <!--end footer-->
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/simple-datatables/umd/simple-datatables.js"></script>
+    <script src="/assets/js/pages/datatable.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+        async function delete_event(event_id) {
+            if (confirm("Are you sure you want to delete this event?")) {
+                const response = await fetch('/api/fevnt/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        event_id: event_id
+                    })
+                })
+
+                document.getElementById('asset_' + event_id).remove()
+            }
+        }
+    </script>
+</body>
+<!--end body-->
+
+</html>

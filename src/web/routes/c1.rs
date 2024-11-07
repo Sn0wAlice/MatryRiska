@@ -1,7 +1,7 @@
 // The web controler for the C1 route
 
 use std::fs;
-use crate::helper::database::{c1_get_all_missions, c1_get_mission_by_id, c1_get_all_valeurmetier, c1_get_valermetier_by_id, c1_get_asset_by_vmid};
+use crate::helper::database::{c1_get_all_missions, c1_get_mission_by_id, c1_get_all_valeurmetier, c1_get_valermetier_by_id, c1_get_asset_by_vmid, c1_get_all_valeurmetier_no_limit, c1_get_all_feared_event};
 
 
 #[tracing::instrument(level = "info")]
@@ -21,9 +21,13 @@ pub async fn c1(path:String) -> String {
     } else if path.starts_with("c1/vm/detail/") {
         let vm_id = path.replace("c1/vm/detail/", "");
         return vm_detail(vm_id.parse::<i32>().unwrap_or(0)).await;
-    }else if path.starts_with("c1/asset/create/") {
+    } else if path.starts_with("c1/asset/create/") {
         let vm_id = path.replace("c1/asset/create/", "");
         return asset_create(vm_id.parse::<i32>().unwrap_or(0)).await;
+    } else if path == "c1/fevnt" {
+        return fevnt().await;
+    } else if path == "c1/fevnt/create" {
+        return fevnt_create().await;
     }
 
     return "__404".to_string();
@@ -130,4 +134,41 @@ async fn vm_create(mission_id:i32) -> String {
 async fn asset_create(vm_id:i32) -> String {
     return fs::read_to_string("html/c1/create-asset.html").unwrap()
         .replace("{{vm_id}}", vm_id.to_string().as_str());
+}
+
+async fn fevnt() -> String {
+
+    let all = c1_get_all_feared_event().await;
+
+    let mut str = String::new();
+    let base = fs::read_to_string("html/c1/files/fevnt-solo.html").unwrap();
+
+    for m in all {
+        let new = base.replace("{{fevnt_name}}", &m.evenement_redoute)
+            .replace("{{fevnt_id}}", &m.event_id.to_string())
+            .replace("{{fevnt_impacts}}", &m.impact.replace("\n", "<br>"))
+            .replace("{{fevnt_vm}}", &m.valeur_metier.to_string())
+            .replace("{{fevnt_gravity}}", &m.gravite.to_string());
+
+        str.push_str(&new);
+    }
+
+    return fs::read_to_string("html/c1/list-fevnt.html").unwrap()
+        .replace("{{fevnt_list}}", &str);
+}
+
+async fn fevnt_create() -> String {
+
+    let vm = c1_get_all_valeurmetier_no_limit().await;
+
+    let mut str = String::new();
+    
+    for m in vm {
+        let new = format!(" <option value=\"{}\">#{} {}</option>", m.valeur_id, m.mission_id, m.valeur_name);
+        str.push_str(&new);
+    }
+
+
+    return fs::read_to_string("html/c1/create-fevnt.html").unwrap()
+        .replace("{{vm_list}}", &str);
 }
