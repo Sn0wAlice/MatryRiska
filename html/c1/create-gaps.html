@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <title>MatryRiska | Gaps create</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <link href="/assets/libs/vanillajs-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+
+</head>
+
+
+<!-- Top Bar Start -->
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+
+        <!-- Page Content-->
+        <div class="page-content" style="margin-top: var(--bs-topbar-height);">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="row g-0 h-100">
+                                    <div class="col-lg-7 border-end">
+                                        <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Create Gaps</h4>
+                                        <br>
+                                        <br>
+                                        <div class="p-4 pt-3">
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="projectName" class="form-label">Referential Type
+                                                    :</label>
+                                                <input type="text" class="form-control" id="g_ref_type"
+                                                    aria-describedby="emailHelp"
+                                                    placeholder="Referential Type">
+                                            </div>
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="projectName" class="form-label">Referential Name
+                                                    :</label>
+                                                <input type="text" class="form-control" id="g_ref_name"
+                                                    aria-describedby="emailHelp"
+                                                    placeholder="Referential Name">
+                                            </div>
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="projectName" class="form-label">Application State
+                                                    :</label>
+                                                <div class="col-sm-12">
+                                                    <select class="form-select" id="g_state">
+                                                        <option value="0" selected>0%</option>
+                                                        <option value="10">10%</option>
+                                                        <option value="20">20%</option>
+                                                        <option value="30">30%</option>
+                                                        <option value="40">40%</option>
+                                                        <option value="50">50%</option>
+                                                        <option value="60">60%</option>
+                                                        <option value="70">70%</option>
+                                                        <option value="80">80%</option>
+                                                        <option value="90">90%</option>
+                                                        <option value="100">100%</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="projectName" class="form-label">Gap
+                                                    :</label>
+                                                <input type="text" class="form-control" id="g_gap"
+                                                    aria-describedby="emailHelp"
+                                                    placeholder="Referential Name">
+                                            </div>
+
+                                            <!--end form-group-->
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="pro-message">
+                                                    Gap justification</label>
+                                                <textarea class="form-control" rows="5" id="g_gap_why" 
+                                                    placeholder="Gap justification"></textarea>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="pro-message">
+                                                    Gap measures</label>
+                                                <textarea class="form-control" rows="5" id="g_gap_counter"
+                                                    placeholder="Gap measures"></textarea>
+                                            </div>
+                                            
+                                            <br>
+                                            <button type="submit" class="btn btn-primary" onclick="push()">Create
+                                                Gap</button>
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="document.location.href='/c1/gaps'">Cancel</button>
+                                        </div>
+                                        <!--end form-->
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-5 align-self-center">
+                                        <form class="p-4">
+                                            <div class="form-group">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/assets/imgs/logo.png" alt=""
+                                                        class="thumb-xxl rounded me-3">
+                                                    <!--end media body-->
+                                                </div>
+
+                                            </div>
+                                            <!--end form-group-->
+                                            <h5 class="fw-normal my-3 lh-lg">
+                                                
+                                                A gaps analysis serves to highlight these discrepancies so that the
+                                                organization can:<br>
+                                                • Understand risk exposure due to non-compliance.<br>
+                                                • Prioritize areas for improvement based on the criticality of each
+                                                gap.<br>
+                                                • Propose corrective measures (e.g., changing configurations,
+                                                updating policies) to close these gaps.<br><br>
+
+                                            </h5>
+                                            {{inject_contributors}}
+                                        </form>
+
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+            {{inject_footer}}
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <!-- vendor js -->
+
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/vanillajs-datepicker/js/datepicker-full.min.js"></script>
+    <script src="/assets/js/pages/projects-create.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+        async function push() {
+            const body = {
+                g_ref_type: document.getElementById('g_ref_type').value,
+                g_ref_name: document.getElementById('g_ref_name').value,
+                g_state: document.getElementById('g_state').value,
+                g_gap: document.getElementById('g_gap').value,
+                g_gap_why: document.getElementById('g_gap_why').value,
+                g_gap_counter: document.getElementById('g_gap_counter').value
+            }
+
+            console.log(body)
+
+            // drop to the api 
+            const response = await fetch('/api/gaps/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await response.json()
+
+            if (data.status == 'success') {
+                document.location.href = '/c1/gaps'
+            } else {
+                alert('Failed to create risk')
+            }
+        }
+    </script>
+</body>
+<!--end body-->
+
+</html>

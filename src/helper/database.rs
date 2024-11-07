@@ -91,6 +91,18 @@ pub struct FearedEvent {
 }
 
 
+#[derive(Debug, Clone)]
+pub struct Gap {
+    pub gap_id: i32,
+    pub referential_type: String,
+    pub referential_name: String,
+    pub application_state: i32,
+    pub gap: String,
+    pub gap_justification: String,
+    pub proposed_measures: String,
+}
+
+
 // ------------ DATABASE SYSTEM ------------
 
 static mut DB_CLIENT: Lazy<Arc<Mutex<Option<mysql::Pool>>>> = Lazy::new(|| {
@@ -1805,7 +1817,203 @@ pub async fn c1_get_all_feared_event() -> Vec<FearedEvent> {
     return events;
 }
 
+pub async fn c1_create_gap(g_ref_type:String, g_ref_name:String, g_state:i32, g_gap:String, g_gap_why:String, g_gap_counter:String) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
 
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+
+        let query = format!("INSERT INTO c1_gaps (referential_type, referential_name, application_state, gap, gap_justification, proposed_measures) VALUES ('{}', '{}', '{}', '{}', '{}', '{}')", g_ref_type, g_ref_name, g_state, g_gap, g_gap_why, g_gap_counter);
+
+        let result = conn.query_drop(query);
+
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+    
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_delete_gap(gap_id:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap() is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("DELETE FROM c1_gaps WHERE gap_id = '{}'", gap_id);
+        
+        let result = conn.query_drop(query);
+        
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+    
+    println!("No database connection");
+    return;
+}
+
+pub async fn c1_get_all_gaps() -> Vec<Gap> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+    
+    let mut gaps: Vec<Gap> = Vec::new();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("SELECT gap_id, referential_type, referential_name, application_state, gap, gap_justification, proposed_measures FROM c1_gaps ORDER BY gap_id ASC");
+        
+        let result = conn.query_map(query, |(gap_id, referential_type, referential_name, application_state, gap, gap_justification, proposed_measures): (i32, String, String, i32, String, String, String)| {
+            Gap {
+                gap_id,
+                referential_type,
+                referential_name,
+                application_state,
+                gap,
+                gap_justification,
+                proposed_measures
+            }
+        });
+        
+        // check how many rows are returned
+        match result {
+            Ok(fetched_gaps) => {
+                for gap in fetched_gaps {
+                    gaps.push(gap);
+                }
+            },
+            Err(_) => {
+                return gaps;
+            }
+        }
+        
+        return gaps;
+    }
+    
+    println!("No database connection");
+    return gaps;
+}
+
+pub async fn c1_get_gaps_by_id(gap_id:i32) -> Vec<Gap> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    let mut gaps: Vec<Gap> = Vec::new();
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("SELECT gap_id, referential_type, referential_name, application_state, gap, gap_justification, proposed_measures FROM c1_gaps WHERE gap_id = '{}' ORDER BY gap_id ASC", gap_id);
+        
+        let result = conn.query_map(query, |(gap_id, referential_type, referential_name, application_state, gap, gap_justification, proposed_measures): (i32, String, String, i32, String, String, String)| {
+            Gap {
+                gap_id,
+                referential_type,
+                referential_name,
+                application_state,
+                gap,
+                gap_justification,
+                proposed_measures
+            }
+        });
+        
+        // check how many rows are returned
+        match result {
+            Ok(fetched_gaps) => {
+                for gap in fetched_gaps {
+                    gaps.push(gap);
+                }
+            },
+            Err(_) => {
+                return gaps;
+            }
+        }
+        
+        return gaps;
+    }
+    
+    println!("No database connection");
+    return gaps;
+}
 
 
 

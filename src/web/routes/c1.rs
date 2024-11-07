@@ -1,7 +1,7 @@
 // The web controler for the C1 route
 
 use std::fs;
-use crate::helper::database::{c1_get_all_missions, c1_get_mission_by_id, c1_get_all_valeurmetier, c1_get_valermetier_by_id, c1_get_asset_by_vmid, c1_get_all_valeurmetier_no_limit, c1_get_all_feared_event};
+use crate::helper::database::{c1_get_all_missions, c1_get_mission_by_id, c1_get_all_valeurmetier, c1_get_valermetier_by_id, c1_get_asset_by_vmid, c1_get_all_valeurmetier_no_limit, c1_get_all_feared_event, c1_get_all_gaps, c1_get_gaps_by_id};
 
 
 #[tracing::instrument(level = "info")]
@@ -28,6 +28,13 @@ pub async fn c1(path:String) -> String {
         return fevnt().await;
     } else if path == "c1/fevnt/create" {
         return fevnt_create().await;
+    } else if path == "c1/gaps" {
+        return gaps().await;
+    } else if path == "c1/gaps/create" {
+        return gaps_create().await;
+    } else if path.starts_with("c1/gaps/") {
+        let vm_id = path.replace("c1/gaps/", "");
+        return gaps_detail(vm_id.parse::<i32>().unwrap_or(0)).await;
     }
 
     return "__404".to_string();
@@ -172,3 +179,53 @@ async fn fevnt_create() -> String {
     return fs::read_to_string("html/c1/create-fevnt.html").unwrap()
         .replace("{{vm_list}}", &str);
 }
+
+async fn gaps() -> String {
+
+    let all = c1_get_all_gaps().await;
+
+    let mut str = String::new();
+    let base = fs::read_to_string("html/c1/files/gaps-solo.html").unwrap();
+
+    for m in all {
+        let new = base.replace("{{gap_id}}", &m.gap_id.to_string())
+            .replace("{{referential_type}}", &m.referential_type)
+            .replace("{{referential_name}}", &m.referential_name.to_string())
+            .replace("{{application_state}}", &m.application_state.to_string())
+            .replace("{{gap}}", &m.gap)
+            .replace("{{gap_justification}}", &m.gap_justification)
+            .replace("{{proposed_measures}}", &m.proposed_measures);
+
+        str.push_str(&new);
+    }
+
+
+    return fs::read_to_string("html/c1/list-gaps.html").unwrap()
+        .replace("{{gaps_list}}", &str);
+}
+
+async fn gaps_create() -> String {
+    return fs::read_to_string("html/c1/create-gaps.html").unwrap();
+}
+
+async fn gaps_detail(gaps_id:i32) -> String {
+    let g = c1_get_gaps_by_id(gaps_id).await;
+
+    if g.len() == 0 {
+        return "__404".to_string();
+    }
+
+    let g = &g[0];
+
+    return fs::read_to_string("html/c1/detail-gaps.html").unwrap()
+        .replace("{{referential_type}}", &g.referential_type)
+        .replace("{{referential_name}}", &g.referential_name)
+        .replace("{{application_state}}", &g.application_state.to_string())
+        .replace("{{gap}}", &g.gap)
+        .replace("{{gap_justification}}", &g.gap_justification.replace("\n", "<br>"))
+        .replace("{{proposed_measures}}", &g.proposed_measures.replace("\n", "<br>"))
+        .replace("{{gap_id}}", &gaps_id.to_string());
+}
+
+
+

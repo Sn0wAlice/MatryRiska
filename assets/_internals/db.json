@@ -190,5 +190,38 @@
                 "type": "int not null"
             }
         ]
+    },
+    {
+        "name": "c1_gaps",
+        "columns": [
+            {
+                "name": "gap_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "referential_type",
+                "type": "varchar(255) not null"
+            },
+            {
+                "name": "referential_name",
+                "type": "varchar(255) not null"
+            },
+            {
+                "name": "application_state",
+                "type": "int not null"
+            },
+            {
+                "name": "gap",
+                "type": "text"
+            },
+            {
+                "name": "gap_justification",
+                "type": "text"
+            },
+            {
+                "name": "proposed_measures",
+                "type": "text"
+            }
+        ]
     }
 ]

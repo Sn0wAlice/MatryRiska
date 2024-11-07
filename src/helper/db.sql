@@ -63,3 +63,13 @@ CREATE TABLE c1_feared_event (
     impact TEXT NOT NULL,
     gravite INT NOT NULL
 );
+
+CREATE TABLE c1_gaps (
+    gap_id INT PRIMARY KEY AUTO_INCREMENT,
+    referential_type VARCHAR(255) NOT NULL,
+    referential_name VARCHAR(255) NOT NULL,
+    application_state int not null,
+    gap TEXT,
+    gap_justification TEXT,
+    proposed_measures TEXT
+);

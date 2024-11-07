@@ -1,0 +1,30 @@
+<tr id="asset_{{gap_id}}">
+    <td>
+        <a href="/c1/gaps/{{gap_id}}">
+            <p class="d-inline-block align-middle mb-0">
+                <a href="" class="d-inline-block align-middle mb-0 text-body">#{{gap_id}}</a>
+            </p>
+        </a>
+    </td>
+    
+    <td>
+        <a href="/c1/gaps/{{gap_id}}">
+            <p class="d-inline-block align-middle mb-0">
+                <span class="font-13 fw-medium">{{referential_type}}</span>
+            </p>
+        </a>
+    </td>
+    <td>
+        <a href="/c1/gaps/{{gap_id}}">
+            <p class="d-inline-block align-middle mb-0">
+                <span class="font-13 fw-medium">{{referential_name}}</span>
+            </p>
+        </a>
+    </td>
+    <td>{{application_state}}</td>
+    <td>{{gap}}</td>
+    <td class="text-end">
+        <a href="/c1/gaps/{{gap_id}}"><i class="iconoir-eye text-secondary fs-18"></i></a>
+        <a href="#" onclick="delete_gap('{{gap_id}}')"><i class="iconoir-bin-half text-secondary fs-18"></i></a>
+    </td>
+</tr>
