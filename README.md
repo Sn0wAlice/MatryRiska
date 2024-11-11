@@ -29,7 +29,7 @@ Key Features:
 
 You Can go here <a href="https://github.com/Sn0wAlice/MatryRiska/wiki/Page-preview">Click here for more preview</a>
 
-<img src="./.github/demo/preview-01.png">
+<img src="./.github/demo/preview-02.png">
 
 </details>
 
@@ -47,7 +47,7 @@ docker-compose up
 
 ### 2. Using cargo
 ```bash
-## Step 1: configure mysql db (can use docker-compose-dev.yml)
+## Step 1: configure mysql db somewhere
 # [...]
 
 ## Step 2: run the server
@@ -56,10 +56,15 @@ cd MatryRiska
 cargo run
 ```
 
+
+
 ## Usage
 When the app is up: go on `http://localhost:8080` and that's it!
 
 You wan't to add a new functionality? Feel free to open a [issue](https://github.com/Sn0wAlice/MatryRiska/issues) or a pull request!
+
+## Configuration
+With the docker file (and local install), you can see the `./config` folder. You can change the configuration by updating the `default.json` file. Don't forget to update the `docker-compose.yml` file to update the default configuration.
 
 ## Contributors
 - [Sn0wAlice](https://github.com/Sn0wAlice)
