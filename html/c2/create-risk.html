@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8" />
+    <title>MatryRiska | Create Risk Source</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link href="/assets/libs/vanillajs-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+</head>
+
+<body>
+
+    {{inject_top}}
+
+    {{inject_side}}
+
+    <div class="page-wrapper">
+        <!-- Page Content-->
+        <div class="page-content" style="margin-top: var(--bs-topbar-height);">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="row g-0 h-100">
+                                    <div class="col-lg-7 border-end">
+                                        <h4 class="card-title fs-16 mb-0 pt-3 ps-4">Create a Risk Source</h4>
+
+                                        <div class="p-4 pt-3">
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="source_risque" class="form-label">Source of Risk:</label>
+                                                <input type="text" class="form-control" id="source_risque"
+                                                    placeholder="Enter the source of risk">
+                                            </div>
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="objectifs_vises" class="form-label">Objectives Targeted:</label>
+                                                <input type="text" class="form-control" id="objectifs_vises"
+                                                    placeholder="Enter objectives targeted by the risk">
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="motivation">Motivation:</label>
+                                                <textarea class="form-control" rows="3" id="motivation"
+                                                    placeholder="Explain the motivation behind this risk source or just set from + to ++++"></textarea>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="ressources">Resources:</label>
+                                                <textarea class="form-control" rows="3" id="ressources"
+                                                    placeholder="Specify resources associated with this risk or just set from + to ++++"></textarea>
+                                            </div>
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="pertinence_sr_ov" class="form-label">Pertinence SR/OV:</label>
+                                                <input type="number" class="form-control" id="pertinence_sr_ov"
+                                                    placeholder="Enter pertinence score for SR/OV">
+                                            </div>
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="priorite" class="form-label">Priority:</label>
+                                                <input type="number" class="form-control" id="priorite"
+                                                    placeholder="Enter priority level">
+                                            </div>
+
+                                            <div class="form-group mb-2 mb-lg-1">
+                                                <label for="retenu" class="form-label">Retained:</label>
+                                                <select class="form-control" id="retenu">
+                                                    <option value="true">Yes</option>
+                                                    <option value="false">No</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label class="form-label mt-2" for="justification_exclusion_sr_ov">
+                                                    Justification for Exclusion SR/OV:</label>
+                                                <textarea class="form-control" rows="3" id="justification_exclusion_sr_ov"
+                                                    placeholder="Provide justification for excluding SR/OV"></textarea>
+                                            </div>
+
+                                            <br>
+                                            <button type="submit" class="btn btn-primary" onclick="createRiskSource()">Create Risk Source</button>
+                                            <button type="button" class="btn btn-danger" onclick="document.location.href='/c2/risk_sources'">Cancel</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-5 align-self-center">
+                                        <form class="p-4">
+                                            <div class="form-group">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/assets/imgs/logo.png" alt=""
+                                                        class="thumb-xxl rounded me-3">
+                                                </div>
+                                            </div>
+                                            <h5 class="fw-normal my-3 lh-lg">
+                                               Define a risk source by filling out this form. This information is essential
+                                                for assessing potential threats and their impact on the organization.
+                                            </h5>
+                                            {{inject_contributors}}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+            {{inject_footer}}
+        </div>
+    </div>
+
+    <!-- Javascript  -->
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/vanillajs-datepicker/js/datepicker-full.min.js"></script>
+    <script src="/assets/js/pages/projects-create.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+        async function createRiskSource() {
+            const body = {
+                source_risque: document.getElementById('source_risque').value,
+                objectifs_vises: document.getElementById('objectifs_vises').value,
+                motivation: document.getElementById('motivation').value,
+                ressources: document.getElementById('ressources').value,
+                pertinence_sr_ov: document.getElementById('pertinence_sr_ov').value,
+                priorite: document.getElementById('priorite').value,
+                retenu: document.getElementById('retenu').value === "true",
+                justification_exclusion_sr_ov: document.getElementById('justification_exclusion_sr_ov').value
+            }
+
+            const response = await fetch('/api/risk_source/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await response.json()
+
+            if (data.status === 'success') {
+                document.location.href = '/c2/'
+            } else {
+                alert('Failed to create risk source')
+            }
+        }
+    </script>
+</body>
+
+</html>

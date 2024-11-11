@@ -103,6 +103,18 @@ pub struct Gap {
     pub proposed_measures: String,
 }
 
+#[derive(Debug, Clone)]
+pub struct C2RiskSources {
+    pub risk_id: i32,
+    pub source_risque: String,
+    pub objectifs_vises: String,
+    pub motivation: Option<String>,
+    pub ressources: Option<String>,
+    pub pertinence_sr_ov: Option<i32>,
+    pub priorite: Option<i32>,
+    pub retenu: bool,
+    pub justification_exclusion_sr_ov: Option<String>,
+}
 
 // ------------ DATABASE SYSTEM ------------
 
@@ -2058,7 +2070,209 @@ pub async fn c1_get_gaps_by_id(gap_id:i32) -> Vec<Gap> {
     return gaps;
 }
 
+// ------------ C2RiskSources ------------
+pub async fn c2_get_all_risk() -> Vec<C2RiskSources> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
 
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+
+    let mut risks: Vec<C2RiskSources> = Vec::new();
+
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("SELECT risk_id, source_risque, objectifs_vises, motivation, ressources, pertinence_sr_ov, priorite, retenu, justification_exclusion_sr_ov FROM c2_risk_sources ORDER BY risk_id ASC");
+
+        let result = conn.query_map(query, |(risk_id, source_risque, objectifs_vises, motivation, ressources, pertinence_sr_ov, priorite, retenu, justification_exclusion_sr_ov): (i32, String, String, Option<String>, Option<String>, Option<i32>, Option<i32>, bool, Option<String>)| {
+            C2RiskSources {
+                risk_id,
+                source_risque,
+                objectifs_vises,
+                motivation,
+                ressources,
+                pertinence_sr_ov,
+                priorite,
+                retenu,
+                justification_exclusion_sr_ov
+            }
+        });
+        
+        // check how many rows are returned
+        match result {
+            Ok(fetched_risks) => {
+                for risk in fetched_risks {
+                    risks.push(risk);
+                }
+            },
+            Err(_) => {
+                return risks;
+            }
+        }
+        
+        return risks;
+    }
+
+    println!("No database connection");
+    return risks;
+}
+
+pub async fn c2_create_risk(source_risque:String, objectifs_vises:String, motivation:String, ressources:String, pertinence_sr_ov:i32, priorite:i32, retenu:bool, justification_exclusion_sr_ov:String) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("INSERT INTO c2_risk_sources (source_risque, objectifs_vises, motivation, ressources, pertinence_sr_ov, priorite, retenu, justification_exclusion_sr_ov) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, '{}')", source_risque, objectifs_vises, motivation, ressources, pertinence_sr_ov, priorite, retenu, justification_exclusion_sr_ov);
+        
+        let result = conn.query_drop(query);
+        
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+    
+    println!("No database connection");
+    return;
+}
+
+pub async fn c2_delete_risk_by_id(risk_id:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+    
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+    
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("DELETE FROM c2_risk_sources WHERE risk_id = '{}'", risk_id);
+        
+        let result = conn.query_drop(query);
+        
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+    
+    println!("No database connection");
+    return;
+}
+
+pub async fn c2_get_risk_detail(risk_id:i32) -> Vec<C2RiskSources> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+    
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    let mut risks: Vec<C2RiskSources> = Vec::new();
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+    
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("SELECT risk_id, source_risque, objectifs_vises, motivation, ressources, pertinence_sr_ov, priorite, retenu, justification_exclusion_sr_ov FROM c2_risk_sources WHERE risk_id = '{}' ORDER BY risk_id ASC", risk_id);
+        
+        let result = conn.query_map(query, |(risk_id, source_risque, objectifs_vises, motivation, ressources, pertinence_sr_ov, priorite, retenu, justification_exclusion_sr_ov): (i32, String, String, Option<String>, Option<String>, Option<i32>, Option<i32>, bool, Option<String>)| {
+            C2RiskSources {
+                risk_id,
+                source_risque,
+                objectifs_vises,
+                motivation,
+                ressources,
+                pertinence_sr_ov,
+                priorite,
+                retenu,
+                justification_exclusion_sr_ov
+            }
+        });
+        
+        // check how many rows are returned
+        match result {
+            Ok(fetched_risks) => {
+                for risk in fetched_risks {
+                    risks.push(risk);
+                }
+            },
+            Err(_) => {
+                return risks;
+            }
+        }
+        
+        return risks;
+    }
+    
+    println!("No database connection");
+    return risks;
+}
 
 // ------------ DATABASE UTILS ------------
 pub async fn check_if_table_exist(table_name:String) -> bool {

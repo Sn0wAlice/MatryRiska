@@ -73,3 +73,17 @@ CREATE TABLE c1_gaps (
     gap_justification TEXT,
     proposed_measures TEXT
 );
+
+
+-- Table for C2
+CREATE TABLE c2_risk_sources (
+    risk_id INT PRIMARY KEY AUTO_INCREMENT,
+    source_risque TEXT NOT NULL,
+    objectifs_vises TEXT NOT NULL,
+    motivation TEXT,
+    ressources TEXT,
+    pertinence_sr_ov INT,
+    priorite INT,
+    retenu BOOLEAN,
+    justification_exclusion_sr_ov TEXT
+);

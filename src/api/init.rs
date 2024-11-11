@@ -101,6 +101,13 @@ pub async fn handler(path: web::Path<String>, mut payload: web::Payload, req: Ht
             return gaps::delete(parsed_json).await;
         }
 
+        "risk_source/create" => {
+            return risk_source::create(parsed_json).await;
+        }
+        "risk_source/delete" => {
+            return risk_source::delete(parsed_json).await;
+        }
+
         _ => {
             trace_logs("Path not found".to_string());
             return HttpResponse::Ok().content_type("application/json").body("{\"error\": \"path not found\"}").customize();

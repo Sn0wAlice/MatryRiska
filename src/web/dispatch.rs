@@ -22,6 +22,7 @@ pub async fn dispatch(path: web::Path<String>) -> impl Responder {
 
 
     path if path.starts_with("c1/") => { content_body = c1::c1(path_arg).await; },
+    path if path.starts_with("c2/") => { content_body = c2::c2(path_arg).await; },
 
 
     path if path.starts_with("risk/detail/") => { content_body = risk::detail(path_arg).await; },

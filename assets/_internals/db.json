@@ -223,5 +223,46 @@
                 "type": "text"
             }
         ]
+    },
+    {
+        "name": "c2_risk_sources",
+        "columns": [
+            {
+                "name": "risk_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "source_risque",
+                "type": "text not null"
+            },
+            {
+                "name": "objectifs_vises",
+                "type": "text not null"
+            },
+            {
+                "name": "motivation",
+                "type": "text"
+            },
+            {
+                "name": "ressources",
+                "type": "text"
+            },
+            {
+                "name": "pertinence_sr_ov",
+                "type": "int"
+            },
+            {
+                "name": "priorite",
+                "type": "int"
+            },
+            {
+                "name": "retenu",
+                "type": "boolean"
+            },
+            {
+                "name": "justification_exclusion_sr_ov",
+                "type": "text"
+            }
+        ]
     }
 ]
