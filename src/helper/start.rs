@@ -1,16 +1,13 @@
 
 use std::fs;
 
-use crate::helper::database::{check_if_table_exist, create_table, check_column_exist, add_column};
-
+use crate::helper::database::{check_if_table_exist, create_table, check_column_exist, add_column, check_db_is_up};
+use crate::helper::trace::trace_logs;
 
 pub async fn startup() {
     // check all the necessary database archi
 
-    if !std::env::args().any(|arg| arg == "--no-wait") {
-        // wait 5 secondes
-        std::thread::sleep(std::time::Duration::from_secs(5));
-    }
+    wait_for_the_db_to_up().await;
    
 
     let file = fs::read_to_string("assets/_internals/db.json").unwrap();
@@ -35,6 +32,21 @@ pub async fn startup() {
         }
     }
 
-    println!("Database setup completed");
+    trace_logs("Database setup completed !".to_owned());
 
+}
+
+
+async fn wait_for_the_db_to_up() {
+    // check if the database is up
+    let mut done = false;
+    while !done {
+        trace_logs("Waiting for the database to be up".to_owned());
+        if check_db_is_up().await {
+            done = true;
+        }
+        // wait 2 seconds
+        tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
+    }
+    
 }

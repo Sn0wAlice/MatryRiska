@@ -147,6 +147,11 @@ async fn reset_database() {
         .user(Some("matryriska"))
         .pass(Some("StrongPassword123"));
 
+    // hcekc if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    if mysql::Pool::new(opts.clone()).is_err() {
+        return ;
+    }
+
     // Create a new MySQL connection pool
     let pool = mysql::Pool::new(opts).unwrap();
 
@@ -155,6 +160,36 @@ async fn reset_database() {
         *db_client = Some(pool);
     }
 
+}
+
+pub async fn check_db_is_up() -> bool {
+
+    reset_database().await;
+
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+
+    if db_client.is_none() {
+        return false;
+    }
+
+    let db_client = db_client.as_ref().unwrap();
+
+    let mut conn = db_client.get_conn().unwrap();
+
+    let query = "SELECT 1";
+
+    let result = conn.query_map(query, |_: i32| {
+        ()
+    });
+
+    match result {
+        Ok(_) => {
+            return true;
+        },
+        Err(_) => {
+            return false;
+        }
+    }
 }
 
 
