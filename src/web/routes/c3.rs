@@ -37,7 +37,6 @@ async fn main() -> String {
         let mut niveau_de_menace = 0.0; // Initialize as a floating-point number
         if fiabilite_cyber > 0.0 {
             let menace_ratio = exposition / fiabilite_cyber;
-            println!("Exposition / Fiabilite Cyber: {}", menace_ratio);
             niveau_de_menace = (menace_ratio * 100.0).round() / 100.0;
         }
 
