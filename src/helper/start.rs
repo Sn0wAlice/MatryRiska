@@ -7,6 +7,16 @@ use crate::helper::trace::trace_logs;
 pub async fn startup() {
     // check all the necessary database archi
 
+    // check file config/default.json exist
+    if !fs::metadata("config/default.json").is_ok() {
+        fs::write("config/default.json", r#"{
+            "db_port": 3306,
+            "db_host": "172.20.0.202",
+            "web_port": 8080
+        }"#).unwrap();
+    }
+
+
     wait_for_the_db_to_up().await;
    
 

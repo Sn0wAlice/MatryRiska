@@ -41,10 +41,11 @@ WORKDIR /matryriska
 # copy the build artifact from the build stage
 COPY --from=build /matryriska/target/release/matryriska .
 
-# copy the assets, html, utils folder to the final image
+# copy the assets, html, utils, config folder to the final image
 COPY ./assets ./assets
 COPY ./html ./html
 COPY ./utils ./utils
+COPY ./config ./config
 
 # set the startup command to run your binary
 CMD ["./matryriska", "--prod", "--webhook"]

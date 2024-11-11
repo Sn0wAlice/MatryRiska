@@ -1,4 +1,5 @@
 use chrono::NaiveDate;
+use std::fs;
 use mysql::*;
 use mysql::prelude::*;
 use serde::{Serialize, Deserialize};
@@ -135,14 +136,21 @@ async fn reset_database() {
 
     let mut h = "127.0.0.1";
 
+    let config = fs::read_to_string("config/default.json").unwrap();
+    let config: serde_json::Value = serde_json::from_str(config.as_str()).unwrap();
+
+    let port: u16 = config.get("db_port").unwrap().as_u64().unwrap() as u16;
+    let host:String = config.get("db_host").unwrap().as_str().unwrap().to_owned();
+
     // check if process arg --prod is used
     if std::env::args().any(|arg| arg == "--prod") {
-        h = "172.20.0.2";
+        h = host.as_str();
     }
 
     // Define MySQL connection options
     let opts = mysql::OptsBuilder::new()
         .ip_or_hostname(Some(h))
+        .tcp_port(port)
         .db_name(Some("matryriska"))
         .user(Some("matryriska"))
         .pass(Some("StrongPassword123"));
