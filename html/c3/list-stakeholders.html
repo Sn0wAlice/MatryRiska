@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8" />
+    <title>MatryRiska | Stakeholders List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link href="/assets/libs/simple-datatables/style.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{inject_head}}
+</head>
+
+<body>
+    {{inject_top}}
+    {{inject_side}}
+
+    <div class="page-wrapper">
+        <!-- Page Content-->
+        <div class="page-content">
+            <div class="container-xxl">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h4 class="card-title">Your Stakeholders</h4>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-auto">
+                                        <div class="row g-2">
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="document.location.href='/c3/stakeholder/create'">
+                                                    <i class="fa-solid fa-plus me-1"></i> Add New Stakeholder
+                                                </button>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                            <!--end card-header-->
+                            <div class="card-body pt-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0 checkbox-all" id="datatable_1">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Stakeholder ID</th>
+                                                <th>Category</th>
+                                                <th>Stakeholder Name</th>
+                                                <th>Dependance</th>
+                                                <th>Penetration</th>
+                                                <th>Maturity SSI</th>
+                                                <th>Confidence</th>
+                                                <th>Exposure</th>
+                                                <th>Cyber Reliability</th>
+                                                <th>Threat Level</th>
+                                                <th class="text-end">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{stakeholder_list}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div><!-- container -->
+
+            {{inject_footer}}
+
+        </div>
+        <!-- end page content -->
+    </div>
+    <!-- end page-wrapper -->
+
+    <!-- Javascript  -->
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/simple-datatables/umd/simple-datatables.js"></script>
+    <script src="/assets/js/pages/datatable.init.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+        async function delete_r(id) {
+            if (confirm("Are you sure you want to delete this stakeholder ?")) {
+                const response = await fetch('/api/stakeholder/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        stakeholder_id: id
+                    })
+                })
+
+                document.getElementById('asset_' + id).remove()
+            }
+        }
+    </script>
+</body>
+
+</html>

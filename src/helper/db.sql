@@ -87,3 +87,14 @@ CREATE TABLE c2_risk_sources (
     retenu BOOLEAN,
     justification_exclusion_sr_ov TEXT
 );
+
+-- Table for C3
+CREATE TABLE c3_stakeholders (
+    stakeholder_id INT PRIMARY KEY AUTO_INCREMENT,
+    category VARCHAR(255) NOT NULL,
+    stakeholder_name VARCHAR(255) NOT NULL,
+    dependance INT NOT NULL,
+    penetration INT NOT NULL,
+    maturite_ssi INT NOT NULL,
+    confiance INT NOT NULL
+);

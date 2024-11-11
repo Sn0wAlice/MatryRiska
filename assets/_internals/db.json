@@ -264,5 +264,38 @@
                 "type": "text"
             }
         ]
+    }, 
+    {
+        "name": "c3_stakeholders",
+        "columns": [
+            {
+                "name": "stakeholder_id",
+                "type": "int primary key auto_increment"
+            },
+            {
+                "name": "category",
+                "type": "varchar(255) not null"
+            },
+            {
+                "name": "stakeholder_name",
+                "type": "varchar(255) not null"
+            },
+            {
+                "name": "dependance",
+                "type": "int not null"
+            },
+            {
+                "name": "penetration",
+                "type": "int not null"
+            },
+            {
+                "name": "maturite_ssi",
+                "type": "int not null"
+            },
+            {
+                "name": "confiance",
+                "type": "int not null"
+            }
+        ]
     }
 ]

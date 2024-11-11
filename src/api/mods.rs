@@ -7,3 +7,4 @@ pub mod asset;
 pub mod fevnt;
 pub mod gaps;
 pub mod risk_source;
+pub mod stakeholder;

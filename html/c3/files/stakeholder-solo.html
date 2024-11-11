@@ -1,4 +1,4 @@
-<tr>
+<tr id="asset_{{stakeholder_id}}">
     <td>
         <a href="/c3/{{stakeholder_id}}">
             <p class="d-inline-block align-middle mb-0">
@@ -22,6 +22,6 @@
     <td>{{fiabilite_cyber}}</td>
     <td>{{niveau_de_menace}}</td>
     <td class="text-end">
-        <a href="/c3/{{stakeholder_id}}"><i class="iconoir-eye text-secondary fs-18"></i></a>
+        <a href="#" onclick="delete_r('{{stakeholder_id}}')"><i class="iconoir-bin-half text-secondary fs-18"></i></a>
     </td>
 </tr>

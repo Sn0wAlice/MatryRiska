@@ -116,6 +116,17 @@ pub struct C2RiskSources {
     pub justification_exclusion_sr_ov: Option<String>,
 }
 
+#[derive(Debug, Clone)]
+pub struct C3Stakeholder {
+    pub stakeholder_id: i32,
+    pub category: String,
+    pub stakeholder_name: String,
+    pub dependance: i32,
+    pub penetration: i32,
+    pub maturite_ssi: i32,
+    pub confiance: i32,
+}
+
 // ------------ DATABASE SYSTEM ------------
 
 static mut DB_CLIENT: Lazy<Arc<Mutex<Option<mysql::Pool>>>> = Lazy::new(|| {
@@ -2273,6 +2284,207 @@ pub async fn c2_get_risk_detail(risk_id:i32) -> Vec<C2RiskSources> {
     println!("No database connection");
     return risks;
 }
+
+
+// ------------ C3Stakeholder ------------
+pub async fn c3_get_all_stakeholder() -> Vec<C3Stakeholder> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+    
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+    
+    let db_client = db_client.as_ref();
+    
+    let mut stakeholders: Vec<C3Stakeholder> = Vec::new();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("SELECT stakeholder_id, category, stakeholder_name, dependance, penetration, maturite_ssi, confiance FROM c3_stakeholders ORDER BY stakeholder_id ASC");
+
+        let result = conn.query_map(query, |(stakeholder_id, category, stakeholder_name, dependance, penetration, maturite_ssi, confiance): (i32, String, String, i32, i32, i32, i32)| {
+            C3Stakeholder {
+                stakeholder_id,
+                category,
+                stakeholder_name,
+                dependance,
+                penetration,
+                maturite_ssi,
+                confiance
+            }
+        });
+        
+        // check how many rows are returned
+        match result {
+            Ok(fetched_stakeholders) => {
+                for stakeholder in fetched_stakeholders {
+                    stakeholders.push(stakeholder);
+                }
+            },
+            Err(_) => {
+                return stakeholders;
+            }
+        }
+        
+        return stakeholders;
+    }
+    
+    println!("No database connection");
+    return stakeholders;
+}
+
+pub async fn c3_create_stakeholder(category:String, stakeholder_name:String, dependance:i32, penetration:i32, maturite_ssi:i32, confiance:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+    
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+    
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("INSERT INTO c3_stakeholders (category, stakeholder_name, dependance, penetration, maturite_ssi, confiance) VALUES ('{}', '{}', '{}', '{}', '{}', '{}')", category, stakeholder_name, dependance, penetration, maturite_ssi, confiance);
+        
+        let result = conn.query_drop(query);
+        
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+    
+    println!("No database connection");
+    return;
+}
+
+pub async fn c3_delete_stakeholder_by_id(stakeholder_id:i32) {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+    
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+    
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("DELETE FROM c3_stakeholders WHERE stakeholder_id = '{}'", stakeholder_id);
+        
+        let result = conn.query_drop(query);
+        
+        match result {
+            Ok(_) => {
+                return;
+            },
+            Err(_) => {
+                return;
+            }
+        }
+    }
+    
+    println!("No database connection");
+    return;
+}
+
+pub async fn c3_get_stakeholder_detail(stakeholder_id:i32) -> Vec<C3Stakeholder> {
+    // check if DB_CLIENT.lock().unwrap().is_none() return any poison error
+    let lock_result = unsafe { DB_CLIENT.lock() };
+    
+    if lock_result.is_err() {
+        // kill script
+        trace_logs("Error: DB_CLIENT.lock().unwrap().is_none() return any poison".to_owned());
+        std::process::exit(1);
+    }
+    
+    // check if need to create new client
+    if lock_result.unwrap().is_none() {
+        new_client().await;
+    }
+    
+    let mut stakeholders: Vec<C3Stakeholder> = Vec::new();
+    
+    // perform database operations
+    let db_client = unsafe { DB_CLIENT.lock().unwrap() };
+    
+    let db_client = db_client.as_ref();
+    
+    if let Some(pool) = db_client {
+        let mut conn = pool.get_conn().unwrap();
+        
+        let query = format!("SELECT stakeholder_id, category, stakeholder_name, dependance, penetration, maturite_ssi, confiance FROM c3_stakeholders WHERE stakeholder_id = '{}' ORDER BY stakeholder_id ASC", stakeholder_id);
+        
+        let result = conn.query_map(query, |(stakeholder_id, category, stakeholder_name, dependance, penetration, maturite_ssi, confiance): (i32, String, String, i32, i32, i32, i32)| {
+            C3Stakeholder {
+                stakeholder_id,
+                category,
+                stakeholder_name,
+                dependance,
+                penetration,
+                maturite_ssi,
+                confiance
+            }
+        });
+        
+        // check how many rows are returned
+        match result {
+            Ok(fetched_stakeholders) => {
+                for stakeholder in fetched_stakeholders {
+                    stakeholders.push(stakeholder);
+                }
+            },
+            Err(_) => {
+                return stakeholders;
+            }
+        }
+        
+        return stakeholders;
+    }
+    
+    println!("No database connection");
+    return stakeholders;
+}
+
 
 // ------------ DATABASE UTILS ------------
 pub async fn check_if_table_exist(table_name:String) -> bool {
