@@ -1,7 +1,7 @@
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
 use crate::helper::functions::extract_string_from_obj_value;
-use crate::helper::database::{c2_create_risk, c2_delete_risk_by_id};
+use crate::helper::database::C2RiskSources;
 
 pub async fn create(body: Value) -> CustomizeResponder<HttpResponse> {
     // Check if the body contains the required keys
@@ -49,7 +49,7 @@ pub async fn create(body: Value) -> CustomizeResponder<HttpResponse> {
     let justification_exclusion_sr_ov = justification_exclusion_sr_ov.replace("'", "\\'");
 
     // Call the function to create the risk source
-    let _ = c2_create_risk(
+    let _ = C2RiskSources::c2_create_risk(
         source_risque,
         objectifs_vises,
         motivation,
@@ -73,7 +73,7 @@ pub async fn delete(body: Value) -> CustomizeResponder<HttpResponse> {
         let id = id.parse::<i32>().unwrap_or(0);
 
         // Call the function to delete the risk source
-        let _ = c2_delete_risk_by_id(id).await;
+        let _ = C2RiskSources::c2_delete_risk_by_id(id).await;
 
         return HttpResponse::Ok()
             .content_type("application/json")

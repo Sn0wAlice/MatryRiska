@@ -1,9 +1,6 @@
 // The web controler for the C1 route
-
 use std::fs;
-use serde::de;
-
-use crate::helper::database::{C2RiskSources, c2_get_all_risk, c2_get_risk_detail};
+use crate::helper::database::C2RiskSources;
 
 
 #[tracing::instrument(level = "info")]
@@ -25,7 +22,7 @@ pub async fn c2(path:String) -> String {
 
 async fn main() -> String {
     // Fetch all feared events asynchronously
-    let all = c2_get_all_risk().await;
+    let all = C2RiskSources::c2_get_all_risk().await;
 
     // Initialize an empty string to store the generated HTML
     let mut str = String::new();
@@ -65,7 +62,7 @@ async fn create() -> String {
 async fn detail(id:i32) -> String {
 
 
-    let detail = c2_get_risk_detail(id).await;
+    let detail = C2RiskSources::c2_get_risk_detail(id).await;
     
     if detail.len() == 0 {
         return "__404".to_string();

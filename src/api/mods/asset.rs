@@ -1,10 +1,8 @@
 // export the home route handler
-use std::fs;
-
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
-use crate::helper::functions::{extract_string_from_obj_value, is_uuid_v4};
-use crate::helper::database::{Risk, c1_get_valermetier_by_id, c1_create_asset, c1_delete_asset_by_id};
+use crate::helper::functions::extract_string_from_obj_value;
+use crate::helper::database::{ValeurMetier, BienSupport};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -51,7 +49,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
     // check mission exist
-    let m = c1_get_valermetier_by_id(m_vm_id).await;
+    let m = ValeurMetier::c1_get_all_valeurmetier(m_vm_id).await;
     if m.len() == 0 {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"vm_not_found\"}").customize();
     }
@@ -61,7 +59,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     let m_description = m_description.replace("'", "\\'");
     let m_name = m_name.replace("'", "\\'");
 
-    let _ = c1_create_asset(m_vm_id, m_name, m_description, m_owner).await;
+    let _ = BienSupport::c1_create_asset(m_vm_id, m_name, m_description, m_owner).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -91,7 +89,7 @@ pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
     // check mission exist
-    let _ = c1_delete_asset_by_id(asset_id).await;
+    let _ = BienSupport::c1_delete_asset_by_id(asset_id).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

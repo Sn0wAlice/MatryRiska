@@ -1,10 +1,8 @@
 // export the home route handler
-use std::fs;
-
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
-use crate::helper::functions::{extract_string_from_obj_value, is_uuid_v4};
-use crate::helper::database::{Risk, c1_get_mission_by_id, c1_create_valeurmetier, c1_delete_asset_by_id, c1_get_asset_by_vmid, c1_delete_vm_by_id};
+use crate::helper::functions::extract_string_from_obj_value;
+use crate::helper::database::{Mission, ValeurMetier, BienSupport};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -57,7 +55,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
     // check mission exist
-    let m = c1_get_mission_by_id(m_mission_id).await;
+    let m = Mission::c1_get_mission_by_id(m_mission_id).await;
     if m.len() == 0 {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"mission_not_found\"}").customize();
     }
@@ -68,7 +66,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     let m_description = m_description.replace("'", "\\'");
     let m_name = m_name.replace("'", "\\'");
 
-    let _ = c1_create_valeurmetier(m_mission_id, m_name, m_source, m_description, m_owner).await;
+    let _ = ValeurMetier::c1_create_valeurmetier(m_mission_id, m_name, m_source, m_description, m_owner).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -95,12 +93,12 @@ pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
         }
     };
 
-    let all_asset = c1_get_asset_by_vmid(vm_id).await;
+    let all_asset = BienSupport::c1_get_asset_by_vmid(vm_id).await;
     for a in all_asset {
-        let _ = c1_delete_asset_by_id(a.support_id).await;
+        let _ = BienSupport::c1_delete_asset_by_id(a.support_id).await;
     }
 
-    let _ = c1_delete_vm_by_id(vm_id).await;
+    let _ = ValeurMetier::c1_delete_vm_by_id(vm_id).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

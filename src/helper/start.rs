@@ -7,11 +7,18 @@ use crate::helper::trace::trace_logs;
 pub async fn startup() {
     // check all the necessary database archi
 
+    // create dir 'config'
+    if !fs::metadata("config").is_ok() {
+        fs::create_dir("config").unwrap();
+    }
+
     // check file config/default.json exist
     if !fs::metadata("config/default.json").is_ok() {
         fs::write("config/default.json", r#"{
             "db_port": 3306,
             "db_host": "172.20.0.202",
+            "db_username": "matryriska",
+            "db_password": "StrongPassword123",
             "web_port": 8080
         }"#).unwrap();
     }

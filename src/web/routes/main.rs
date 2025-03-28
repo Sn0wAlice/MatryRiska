@@ -2,11 +2,11 @@
 use std::fs;
 
 use crate::web::routes::risk::get_id;
-use crate::helper::database::{Countermeasure, select_all_risk, get_all_scenario_of_risk, get_all_countermeasure_from_risk_uuid};
+use crate::helper::database::{Risk,Countermeasure, Scenario};
 
 #[tracing::instrument(level = "info")]
 pub async fn main() -> String {
-  let risk = select_all_risk().await;
+  let risk = Risk::select_all_risk().await;
 
 
   let mut str = String::new();
@@ -14,8 +14,8 @@ pub async fn main() -> String {
 
   for r in risk {
 
-    let sc= get_all_scenario_of_risk(r.risk_uuid.clone().to_string()).await;
-    let ctm = get_all_countermeasure_from_risk_uuid(r.risk_uuid.clone().to_string()).await;
+    let sc= Scenario::get_all_scenario_of_risk(r.risk_uuid.clone().to_string()).await;
+    let ctm = Countermeasure::get_all_countermeasure_from_risk_uuid(r.risk_uuid.clone().to_string()).await;
 
     let mut avg = average_resolution(ctm.clone());
 

@@ -4,9 +4,7 @@ use std::fs;
 use uuid::Uuid;
 
 use crate::helper::functions::is_uuid_v4;
-use crate::helper::database::{get_risk_detail, get_all_scenario_of_risk, get_all_countermeasure_from_risk_uuid};
-
-use super::scenario;
+use crate::helper::database::{Risk, Scenario, Countermeasure};
 
 #[tracing::instrument(level = "info")]
 pub async fn create() -> String {
@@ -24,7 +22,7 @@ pub async fn detail(path: String) -> String {
   }
 
   // get risk detail
-  let risk_detail = get_risk_detail(risk_uuid.clone()).await;
+  let risk_detail = Risk::get_risk_detail(risk_uuid.clone()).await;
   if risk_detail.is_empty() {
     return "__404".to_string();
   }
@@ -32,7 +30,7 @@ pub async fn detail(path: String) -> String {
   let risk_detail = risk_detail.get(0).unwrap();
 
 
-  let scenario_list = get_all_scenario_of_risk(risk_uuid.clone()).await;
+  let scenario_list = Scenario::get_all_scenario_of_risk(risk_uuid.clone()).await;
   let scenario_count = scenario_list.len();
 
   let mut str = String::new();
@@ -49,7 +47,7 @@ pub async fn detail(path: String) -> String {
     str.push_str(scenario.as_str());
   }
 
-  let countermeasure = get_all_countermeasure_from_risk_uuid(risk_uuid.clone()).await;
+  let countermeasure = Countermeasure::get_all_countermeasure_from_risk_uuid(risk_uuid.clone()).await;
 
 
   let index = fs::read_to_string("html/risk/detail.html").unwrap()
@@ -73,7 +71,7 @@ pub async fn update(path: String) -> String {
   }
 
   // get risk detail
-  let risk_detail = get_risk_detail(risk_uuid.clone()).await;
+  let risk_detail = Risk::get_risk_detail(risk_uuid.clone()).await;
   if risk_detail.is_empty() {
     return "__404".to_string();
   }
@@ -81,7 +79,7 @@ pub async fn update(path: String) -> String {
   let risk_detail = risk_detail.get(0).unwrap();
 
 
-  let countermeasure = get_all_countermeasure_from_risk_uuid(risk_uuid.clone()).await;
+  let countermeasure = Countermeasure::get_all_countermeasure_from_risk_uuid(risk_uuid.clone()).await;
 
 
   let index = fs::read_to_string("html/risk/update.html").unwrap()
@@ -102,7 +100,7 @@ pub async fn delete(path: String) -> String {
   }
 
   // get risk detail
-  let risk_detail = get_risk_detail(risk_uuid.clone()).await;
+  let risk_detail = Risk::get_risk_detail(risk_uuid.clone()).await;
   if risk_detail.is_empty() {
     return "__404".to_string();
   }

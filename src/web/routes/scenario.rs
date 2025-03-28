@@ -3,7 +3,7 @@ use std::fs;
 
 use crate::web::routes::risk::get_id;
 use crate::helper::functions::is_uuid_v4;
-use crate::helper::database::{get_risk_detail, get_scenario_detail,get_scenario_risk, get_all_countermeasure_of_sc};
+use crate::helper::database::{Risk, Scenario, ScenarioRisk, Countermeasure};
 
 #[tracing::instrument(level = "info")]
 pub async fn create(path:String) -> String {
@@ -16,7 +16,7 @@ pub async fn create(path:String) -> String {
     }
     
     // check if risk exist
-    let risk_detail = get_risk_detail(risk_uuid).await;
+    let risk_detail = Risk::get_risk_detail(risk_uuid).await;
 
     if risk_detail.is_empty() {
         return "__404".to_string();
@@ -42,7 +42,7 @@ pub async fn detail(path:String) -> String {
     }
 
     // check if scenario exist
-    let scenario_detail = get_scenario_detail(scenario_uuid).await;
+    let scenario_detail = Scenario::get_all_scenario_of_risk(scenario_uuid).await;
 
     if scenario_detail.is_empty() {
         return "__404".to_string();
@@ -50,11 +50,11 @@ pub async fn detail(path:String) -> String {
 
     let scenario_detail = scenario_detail.get(0).unwrap();
 
-    let scenario_risk = get_scenario_risk(scenario_detail.scenario_uuid.to_string()).await;
+    let scenario_risk = ScenarioRisk::get_scenario_risk(scenario_detail.scenario_uuid.to_string()).await;
     let scenario_risk = scenario_risk.get(0).unwrap();
 
 
-    let countermeasure = get_all_countermeasure_of_sc(scenario_detail.scenario_uuid.to_string()).await;
+    let countermeasure = Countermeasure::get_all_countermeasure_of_sc(scenario_detail.scenario_uuid.to_string()).await;
 
     let mut countermeasure_html = String::new();
     let base_countermeasure = fs::read_to_string("html/scenario/files/countermeasure.html").unwrap();
@@ -95,7 +95,7 @@ pub async fn update(path:String) -> String {
     }
 
     // check if scenario exist
-    let scenario_detail = get_scenario_detail(scenario_uuid).await;
+    let scenario_detail = Scenario::get_all_scenario_of_risk(scenario_uuid).await;
 
     if scenario_detail.is_empty() {
         return "__404".to_string();
@@ -103,7 +103,7 @@ pub async fn update(path:String) -> String {
 
     let scenario_detail = scenario_detail.get(0).unwrap();
 
-    let scenario_risk = get_scenario_risk(scenario_detail.scenario_uuid.to_string()).await;
+    let scenario_risk = ScenarioRisk::get_scenario_risk(scenario_detail.scenario_uuid.to_string()).await;
     let scenario_risk = scenario_risk.get(0).unwrap();
 
 
@@ -131,7 +131,7 @@ pub async fn delete(path:String) -> String {
     }
 
     // check if scenario exist
-    let scenario_detail = get_scenario_detail(scenario_uuid).await;
+    let scenario_detail = Scenario::get_all_scenario_of_risk(scenario_uuid).await;
 
     if scenario_detail.is_empty() {
         return "__404".to_string();

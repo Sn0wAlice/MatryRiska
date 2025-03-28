@@ -1,10 +1,8 @@
 // export the home route handler
-use std::fs;
-
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
-use crate::helper::functions::{extract_string_from_obj_value, is_uuid_v4};
-use crate::helper::database::{Risk, c1_delete_feared_event, c1_feared_event_create, c1_get_valermetier_by_id};
+use crate::helper::functions::extract_string_from_obj_value;
+use crate::helper::database::{FearedEvent, ValeurMetier};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -61,7 +59,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     
 
     // check mission exist
-    let m = c1_get_valermetier_by_id(m_bv).await;
+    let m = ValeurMetier::c1_get_all_valeurmetier(m_bv).await;
     if m.len() == 0 {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"business_value_not_found\"}").customize();
     }
@@ -70,7 +68,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     let m_impacts = m_impacts.replace("'", "\\'");
     let m_name = m_name.replace("'", "\\'");
 
-    let _ = c1_feared_event_create(m_name, m_impacts, m_bv, m_gravity).await;
+    let _ = FearedEvent::c1_feared_event_create(m_name, m_impacts, m_bv, m_gravity).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -100,7 +98,7 @@ pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
 
-    let _ = c1_delete_feared_event(event_id).await;
+    let _ = FearedEvent::c1_delete_feared_event(event_id).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

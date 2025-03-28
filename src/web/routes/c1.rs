@@ -1,7 +1,7 @@
 // The web controler for the C1 route
 
 use std::fs;
-use crate::helper::database::{c1_get_all_missions, c1_get_mission_by_id, c1_get_all_valeurmetier, c1_get_valermetier_by_id, c1_get_asset_by_vmid, c1_get_all_valeurmetier_no_limit, c1_get_all_feared_event, c1_get_all_gaps, c1_get_gaps_by_id};
+use crate::helper::database::{Mission, ValeurMetier, BienSupport, FearedEvent, Gap};
 
 
 #[tracing::instrument(level = "info")]
@@ -43,7 +43,7 @@ pub async fn c1(path:String) -> String {
 async fn coremission() -> String {
 
     // Get all missions
-    let missions = c1_get_all_missions().await;
+    let missions = Mission::c1_get_all_missions().await;
 
     let mut str = String::new();
     let base = fs::read_to_string("html/c1/files/m-solo.html").unwrap();
@@ -68,14 +68,14 @@ async fn coremission_create() -> String {
 async fn coremission_detail(mission_id:i32) -> String {
 
     // get mission details
-    let mission = c1_get_mission_by_id(mission_id.clone()).await;
+    let mission = Mission::c1_get_mission_by_id(mission_id.clone()).await;
     if mission.len() == 0 {
         return "__404".to_string();
     }
 
     let mission = &mission[0];
 
-    let get_all_valeurmetier = c1_get_all_valeurmetier(mission_id).await;
+    let get_all_valeurmetier = ValeurMetier::c1_get_all_valeurmetier(mission_id).await;
 
 
     let mut str = String::new();
@@ -100,7 +100,7 @@ async fn coremission_detail(mission_id:i32) -> String {
 
 async fn vm_detail(vm_id:i32) -> String {
 
-    let vm = c1_get_valermetier_by_id(vm_id).await;
+    let vm = ValeurMetier::c1_get_valermetier_by_id(vm_id).await;
 
     if vm.len() == 0 {
         return "__404".to_string();
@@ -108,7 +108,7 @@ async fn vm_detail(vm_id:i32) -> String {
 
     let vm = &vm[0];
 
-    let get_all_asset = c1_get_asset_by_vmid(vm_id).await;
+    let get_all_asset = BienSupport::c1_get_asset_by_vmid(vm_id).await;
 
     let mut str = String::new();
     let base = fs::read_to_string("html/c1/files/asset-solo.html").unwrap();
@@ -145,7 +145,7 @@ async fn asset_create(vm_id:i32) -> String {
 
 async fn fevnt() -> String {
 
-    let all = c1_get_all_feared_event().await;
+    let all = FearedEvent::c1_get_all_feared_event().await;
 
     let mut str = String::new();
     let base = fs::read_to_string("html/c1/files/fevnt-solo.html").unwrap();
@@ -166,7 +166,7 @@ async fn fevnt() -> String {
 
 async fn fevnt_create() -> String {
 
-    let vm = c1_get_all_valeurmetier_no_limit().await;
+    let vm = ValeurMetier::c1_get_all_valeurmetier_no_limit().await;
 
     let mut str = String::new();
     
@@ -182,7 +182,7 @@ async fn fevnt_create() -> String {
 
 async fn gaps() -> String {
 
-    let all = c1_get_all_gaps().await;
+    let all = Gap::c1_get_all_gaps().await;
 
     let mut str = String::new();
     let base = fs::read_to_string("html/c1/files/gaps-solo.html").unwrap();
@@ -209,7 +209,7 @@ async fn gaps_create() -> String {
 }
 
 async fn gaps_detail(gaps_id:i32) -> String {
-    let g = c1_get_gaps_by_id(gaps_id).await;
+    let g = Gap::c1_get_gaps_by_id(gaps_id).await;
 
     if g.len() == 0 {
         return "__404".to_string();

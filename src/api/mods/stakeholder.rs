@@ -1,7 +1,7 @@
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
 use crate::helper::functions::extract_string_from_obj_value;
-use crate::helper::database::{c3_create_stakeholder, c3_delete_stakeholder_by_id};
+use crate::helper::database::C3Stakeholder;
 
 pub async fn create(body: Value) -> CustomizeResponder<HttpResponse> {
     // Check if the body contains the required keys
@@ -49,7 +49,7 @@ pub async fn create(body: Value) -> CustomizeResponder<HttpResponse> {
     let stakeholder_name = stakeholder_name.replace("'", "\\'");
 
     // Call the function to create the stakeholder
-    let _ = c3_create_stakeholder(
+    let _ = C3Stakeholder::c3_create_stakeholder(
         category,
         stakeholder_name,
         dependance,
@@ -71,7 +71,7 @@ pub async fn delete(body: Value) -> CustomizeResponder<HttpResponse> {
         let id = id.parse::<i32>().unwrap_or(0);
 
         // Call the function to delete the stakeholder
-        let _ = c3_delete_stakeholder_by_id(id).await;
+        let _ = C3Stakeholder::c3_delete_stakeholder_by_id(id).await;
 
         return HttpResponse::Ok()
             .content_type("application/json")

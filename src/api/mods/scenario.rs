@@ -1,8 +1,8 @@
 // export the home route handler
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
-use crate::helper::functions::{extract_string_from_obj_value,};
-use crate::helper::database::{create_new_scenario, create_scenario_risk, delete_countermeasure_from_sc, delete_scenario, delete_scenario_risk, get_risk_detail, get_scenario_detail, update_scenario, update_scenario_risk, Risk, Scenario, ScenarioRisk};
+use crate::helper::functions::extract_string_from_obj_value;
+use crate::helper::database::{Scenario, Countermeasure, Risk};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -36,7 +36,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
     // check risk exist
-    let risk = get_risk_detail(risk_uuid.to_string()).await;
+    let risk = Risk::get_risk_detail(risk_uuid.to_string()).await;
     if risk.is_empty() {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"risk_not_found\"}").customize();
     }
@@ -114,10 +114,10 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
 
 
     // create the scenario
-    let scenario_uuid = create_new_scenario(risk_uuid.to_string(), sc_scenario_description, sc_threat_description, sc_custom_note).await;
+    let scenario_uuid = Scenario::create_new_scenario(risk_uuid.to_string(), sc_scenario_description, sc_threat_description, sc_custom_note).await;
     
     // create the scenario risk
-    let _ = create_scenario_risk(scenario_uuid.to_string(), sc_likelihood, sc_reputational, sc_operational, sc_legal_compliance, sc_financial).await;
+    let _ = Scenario::create_scenario_risk(scenario_uuid.to_string(), sc_likelihood, sc_reputational, sc_operational, sc_legal_compliance, sc_financial).await;
     
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -153,7 +153,7 @@ pub async fn update(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
     // check scenario exist
-    let scenario = get_scenario_detail(scenario_uuid.to_string()).await;
+    let scenario = Scenario::get_scenario_detail(scenario_uuid.to_string()).await;
 
     if scenario.is_empty() {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"scenario_not_found\"}").customize();
@@ -231,10 +231,10 @@ pub async fn update(body:Value) -> CustomizeResponder<HttpResponse> {
     let sc_custom_note = sc_custom_note.replace("\"", "").replace("'", "");
 
     // update the scenario
-    let _ = update_scenario(scenario_uuid.to_string(), sc_scenario_description, sc_threat_description, sc_custom_note).await;
+    let _ = Scenario::update_scenario(scenario_uuid.to_string(), sc_scenario_description, sc_threat_description, sc_custom_note).await;
 
     // update the scenario risk
-    let _ = update_scenario_risk(scenario_uuid.to_string(), sc_likelihood, sc_reputational, sc_operational, sc_legal_compliance, sc_financial).await;
+    let _ = Scenario::update_scenario_risk(scenario_uuid.to_string(), sc_likelihood, sc_reputational, sc_operational, sc_legal_compliance, sc_financial).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -261,16 +261,16 @@ pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
     // check scenario exist
-    let scenario = get_scenario_detail(scenario_uuid.to_string()).await;
+    let scenario = Scenario::get_scenario_detail(scenario_uuid.to_string()).await;
 
     if scenario.is_empty() {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"scenario_not_found\"}").customize();
     }
 
     // delete the scenario
-    let _ = delete_scenario(scenario_uuid.to_string()).await;
-    let _ = delete_scenario_risk(scenario_uuid.to_string()).await;
-    let _ = delete_countermeasure_from_sc(scenario_uuid.to_string()).await;
+    let _ = Scenario::delete_scenario(scenario_uuid.to_string()).await;
+    let _ = Scenario::delete_scenario_risk(scenario_uuid.to_string()).await;
+    let _ = Countermeasure::delete_countermeasure_from_sc(scenario_uuid.to_string()).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

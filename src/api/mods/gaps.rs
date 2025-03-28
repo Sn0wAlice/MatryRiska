@@ -1,10 +1,8 @@
 // export the home route handler
-use std::fs;
-
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
-use crate::helper::functions::{extract_string_from_obj_value, is_uuid_v4};
-use crate::helper::database::{Risk, c1_create_gap, c1_delete_gap};
+use crate::helper::functions::extract_string_from_obj_value;
+use crate::helper::database::Gap;
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -66,7 +64,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     let g_gap_why = g_gap_why.replace("'", "\\'");
     let g_gap_counter = g_gap_counter.replace("'", "\\'");
 
-    let _ = c1_create_gap(g_ref_type, g_ref_name, g_state, g_gap, g_gap_why, g_gap_counter).await;
+    let _ = Gap::c1_create_gap(g_ref_type, g_ref_name, g_state, g_gap, g_gap_why, g_gap_counter).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -94,7 +92,7 @@ pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
     };
 
 
-    let _ = c1_delete_gap(gaps_id).await;
+    let _ = Gap::c1_delete_gap(gaps_id).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

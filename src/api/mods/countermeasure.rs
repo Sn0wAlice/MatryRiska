@@ -1,10 +1,8 @@
 // export the home route handler
-use std::fs;
-
 use actix_web::{CustomizeResponder, HttpResponse, Responder};
 use serde_json::{json, Value};
 use crate::helper::functions::{extract_string_from_obj_value, is_uuid_v4};
-use crate::helper::database::{Risk, create_countermeasure, get_scenario_detail, update_countermeasure, delete_countermeasure};
+use crate::helper::database::{Countermeasure, Scenario};
 
 
 pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
@@ -34,7 +32,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     }
 
     // check if scenario exist
-    let scenario_detail = get_scenario_detail(scenario_uuid.clone()).await;
+    let scenario_detail = Scenario::get_scenario_detail(scenario_uuid.clone()).await;
 
     if scenario_detail.is_empty() {
         return HttpResponse::Ok().content_type("application/json").body("{\"error\": true, \"status\": \"scenario_not_found\"}").customize();
@@ -45,7 +43,7 @@ pub async fn create(body:Value) -> CustomizeResponder<HttpResponse> {
     let doc_description = doc_description.replace("'", "\\'");
 
 
-    let _ = create_countermeasure(scenario_uuid, doc_name, doc_description).await;
+    let _ = Countermeasure::create_countermeasure(scenario_uuid, doc_name, doc_description).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -89,7 +87,7 @@ pub async fn update(body:Value) -> CustomizeResponder<HttpResponse> {
     let solved_description = solved_description.replace("'", "\\'");
 
     // update the countermeasure
-    let _ = update_countermeasure(ctm_uuid, doc_name, doc_description, solved, solved_description).await;
+    let _ = Countermeasure::update_countermeasure(ctm_uuid, doc_name, doc_description, solved, solved_description).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }
@@ -113,7 +111,7 @@ pub async fn delete(body:Value) -> CustomizeResponder<HttpResponse> {
     }
 
     // delete the countermeasure
-    let _ = delete_countermeasure(ctm_uuid).await;
+    let _ = Countermeasure::delete_countermeasure(ctm_uuid).await;
 
     return HttpResponse::Ok().content_type("application/json").body(json!({"status": "success"}).to_string()).customize();
 }

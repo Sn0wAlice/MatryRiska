@@ -4,7 +4,7 @@ use std::fs;
 use uuid::Uuid;
 
 use crate::helper::functions::is_uuid_v4;
-use crate::helper::database::{get_scenario_detail, get_ctm_by_id};
+use crate::helper::database::{Scenario, Countermeasure};
 
 #[tracing::instrument(level = "info")]
 pub async fn create(path:String) -> String {
@@ -17,7 +17,7 @@ pub async fn create(path:String) -> String {
     }
     
     // check if risk exist
-    let scenario_detail = get_scenario_detail(risk_uuid).await;
+    let scenario_detail = Scenario::get_scenario_detail(risk_uuid).await;
 
     if scenario_detail.is_empty() {
         return "__404".to_string();
@@ -40,7 +40,7 @@ pub async fn detail(path: String) -> String {
     }
   
     // get risk detail
-    let ctm_detail = get_ctm_by_id(sc_uuid.clone()).await;
+    let ctm_detail = Countermeasure::get_ctm_by_id(sc_uuid.clone()).await;
     if ctm_detail.is_empty() {
       return "__404".to_string();
     }
@@ -67,7 +67,7 @@ pub async fn update(path: String) -> String {
     }
   
     // get risk detail
-    let ctm_detail = get_ctm_by_id(sc_uuid.clone()).await;
+    let ctm_detail = Countermeasure::get_ctm_by_id(sc_uuid.clone()).await;
     if ctm_detail.is_empty() {
       return "__404".to_string();
     }
@@ -94,7 +94,7 @@ pub async fn delete(path: String) -> String {
   }
 
   // get risk detail
-  let ctm_detail = get_ctm_by_id(sc_uuid.clone()).await;
+  let ctm_detail = Countermeasure::get_ctm_by_id(sc_uuid.clone()).await;
   if ctm_detail.is_empty() {
     return "__404".to_string();
   }

@@ -1,7 +1,7 @@
 // The web controller for the C3 route
 
 use std::fs;
-use crate::helper::database::{C3Stakeholder, c3_get_all_stakeholder, c3_get_stakeholder_detail};
+use crate::helper::database::C3Stakeholder;
 
 #[tracing::instrument(level = "info")]
 pub async fn c3(path: String) -> String {
@@ -19,7 +19,7 @@ pub async fn c3(path: String) -> String {
 
 async fn main() -> String {
     // Fetch all stakeholders asynchronously
-    let all = c3_get_all_stakeholder().await;
+    let all = C3Stakeholder::c3_get_all_stakeholder().await;
 
     // Initialize an empty string to store the generated HTML
     let mut str = String::new();
@@ -70,7 +70,7 @@ async fn create() -> String {
 }
 
 async fn detail(id: i32) -> String {
-    let detail = c3_get_stakeholder_detail(id).await;
+    let detail = C3Stakeholder::c3_get_stakeholder_detail(id).await;
     
     if detail.is_empty() {
         return "__404".to_string();
