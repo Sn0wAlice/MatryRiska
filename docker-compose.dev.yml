@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:8.0  # You can choose another version of MySQL if needed
+    container_name: matryriska-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Set your root password
+      MYSQL_DATABASE: matryriska         # This creates the database on startup
+      MYSQL_USER: matryriska             # Optional: Set up an additional user
+      MYSQL_PASSWORD: StrongPassword123  # Optional: Set a password for the user
+    networks:
+      matryriska-net:
+        ipv4_address: 172.20.0.202         # Assign a fixed IP address
+    volumes:
+      - mysql_data:/var/lib/mysql        # Persist MySQL data
+    ports:
+      - "3306:3306"                      # Expose MySQL port
+
+volumes:
+  mysql_data:
+
+networks:
+  matryriska-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16          # Define a custom subnet
