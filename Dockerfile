@@ -45,7 +45,6 @@ COPY --from=build /matryriska/target/release/matryriska .
 COPY ./assets ./assets
 COPY ./html ./html
 COPY ./utils ./utils
-COPY ./config ./config
 
 # set the startup command to run your binary
 CMD ["./matryriska", "--prod", "--webhook"]
