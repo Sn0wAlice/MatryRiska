@@ -20,3 +20,4 @@ target/
 template/
 assets/images/*
 tmp.yml
+config
