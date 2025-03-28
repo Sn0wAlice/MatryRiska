@@ -66,5 +66,7 @@ You wan't to add a new functionality? Feel free to open a [issue](https://github
 ## Configuration
 With the docker file (and local install), you can see the `./config` folder. You can change the configuration by updating the `default.json` file. Don't forget to update the `docker-compose.yml` file to update the default configuration.
 
+> Database configuration are also in the default.json file in the `./config` folder. You can change the database configuration by updating the `default.json` file. Don't forget to update the `docker-compose.yml` file to mount this folder if needed !
+
 ## Contributors
 - [Sn0wAlice](https://github.com/Sn0wAlice)
